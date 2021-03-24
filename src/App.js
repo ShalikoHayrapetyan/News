@@ -1,7 +1,14 @@
 
 import './App.css';
 import firebase from 'firebase';
-
+import AdminPage from './adminka/AdminPage'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import HomePage from './HomePage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDvmPrdgCaZQ1BqFiUpfaerO0JKeb7lQgk",
@@ -16,9 +23,18 @@ firebase.initializeApp(firebaseConfig);
 
 function App() {
   return (
-    <div >
-      <h1>My Empty Project</h1>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+         <HomePage />
+        </Route>
+        <Route path="/admin">
+          <AdminPage/>
+        </Route>
+      
+      </Switch>
+    </Router>
+
   );
 }
 
