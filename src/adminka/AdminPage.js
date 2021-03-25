@@ -1,9 +1,17 @@
 
- function AdminPage() {
+import React from 'react';
+import { useSelector } from 'react-redux';
+import SignIn from "./SignIn";
+
+
+function AdminPage() {
+  const isAdmin = useSelector(state => state.authReducer.isAdmin)
   return (
     <div>
-      <h2>Adminka</h2>
+     { isAdmin ? <h1>YESSSSSS</h1> : <SignIn />} 
     </div>
+
   );
+
 }
 export default AdminPage
