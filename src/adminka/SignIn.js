@@ -1,4 +1,4 @@
-import React, {  useRef } from 'react';
+import React, { useRef } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,19 +50,23 @@ export default function SignIn() {
     const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
     const email = useRef("");
     const password = useRef("");
-    const dispatch = useDispatch()
-   
+    const dispatch = useDispatch();
+
     const handleSignInAdmin = (e) => {
         e.preventDefault()
         let { value: getPassword } = password.current;
         let { value: getEmail } = email.current;
+
         if (adminEmail === getEmail && adminPassword === getPassword) {
             dispatch({
-                type: 'signIn',
+                type: 'signIn/signout',
                 payload: {
-                    isAdmin: true
+                    isAdmin: true,
                 }
-            })
+            });
+
+            localStorage.setItem('isLocalAdmin', getEmail);
+
         } else alert("wrong email or password")
     }
 

@@ -1,16 +1,20 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import './admin.css';
 import SignIn from "./SignIn";
+import Dashboard from './Dashboard';
 
 
 function AdminPage() {
-  const isAdmin = useSelector(state => state.authReducer.isAdmin)
+  const isAdmin = useSelector(state => state.authReducer.isAdmin);
+
+  let isLocalAdmin = localStorage.getItem("isLocalAdmin");
+
   return (
     <div>
-     { isAdmin ? <h1>YESSSSSS</h1> : <SignIn />} 
+      { (isAdmin || isLocalAdmin === 'admin') ? <Dashboard /> : <SignIn />}
     </div>
-
   );
 
 }
