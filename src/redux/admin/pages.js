@@ -4,6 +4,7 @@ const initialState = {
     category: false,
 }
 
+
 const pages = (state = initialState, action) => {
     switch (action.type) {
         case "addNews":
