@@ -9,7 +9,6 @@ import { auth } from '../App';
 
 function AdminPage() {
   const localAdminEmail = useSelector(state => state.authReducer.adminEmail);
- console.log( auth.currentUser)
   return (
     <div>
       

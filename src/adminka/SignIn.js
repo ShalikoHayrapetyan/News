@@ -55,21 +55,21 @@ export default function SignIn() {
     //const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
     const dispatch = useDispatch();
 
- 
-      useEffect(() => {
+
+    useEffect(() => {
         auth.onAuthStateChanged((user) => {
-            console.log("aaa")
-            if(user){
+
+            if (user) {
                 dispatch({
-                type: 'signIn',
-                payload: {
-                    adminEmail: user.email,
-                }
-            });
+                    type: 'signIn',
+                    payload: {
+                        adminEmail: user.email,
+                    }
+                });
             }
-            
-          });
-      },[]);
+
+        });
+    }, []);
 
     const handleSignInAdmin = (e) => {
         e.preventDefault()
@@ -77,7 +77,7 @@ export default function SignIn() {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-             
+
             })
             .catch((error) => {
                 var errorCode = error.code;
