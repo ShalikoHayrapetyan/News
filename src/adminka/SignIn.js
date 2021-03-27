@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useDispatch, useSelector } from 'react-redux';
+import { auth } from "../App"
 
 function Copyright() {
     return (
@@ -46,28 +47,44 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignIn() {
+
+    const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
+
     const classes = useStyles();
-    const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
-    const email = useRef("");
-    const password = useRef("");
+    //const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
     const dispatch = useDispatch();
+
+ 
+      useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            console.log("aaa")
+            if(user){
+                dispatch({
+                type: 'signIn',
+                payload: {
+                    adminEmail: user.email,
+                }
+            });
+            }
+            
+          });
+      },[]);
 
     const handleSignInAdmin = (e) => {
         e.preventDefault()
-        let { value: getPassword } = password.current;
-        let { value: getEmail } = email.current;
+        auth.signInWithEmailAndPassword(login, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
 
-        if (adminEmail === getEmail && adminPassword === getPassword) {
-            dispatch({
-                type: 'signIn/signout',
-                payload: {
-                    isAdmin: true,
-                }
+             
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode, errorMessage)
             });
 
-            localStorage.setItem('isLocalAdmin', getEmail);
-
-        } else alert("wrong email or password")
     }
 
     return (
@@ -82,13 +99,15 @@ export default function SignIn() {
         </Typography>
                 <form className={classes.form} noValidate onSubmit={handleSignInAdmin}>
                     <input
-                        ref={email}
+                        value={login}
+                        onChange={(e) => setLogin(e.target.value)}
                         type="text"
                         placeholder="Email"
 
                     />
                     <input
-                        ref={password}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         type="password"
                         placeholder="Password"
 

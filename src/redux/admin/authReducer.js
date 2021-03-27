@@ -1,20 +1,20 @@
 const initialState = {
-    isAdmin: false,
-    admin:
-    {
-        email: "admin",
-        password: "admin"
-    },
+    
+        adminEmail: null,
+ 
 
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "signIn/signout":
+        case "signIn":
             return {
-                ...state,
-                isAdmin: action.payload.isAdmin
+                adminEmail:action.payload.adminEmail
             };
+            case "signOut":
+                return {
+                    adminEmail:null
+                };
         default:
             return state
 
