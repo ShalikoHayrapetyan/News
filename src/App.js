@@ -9,6 +9,7 @@ import {
   Link
 } from "react-router-dom";
 import HomePage from './HomePage';
+import Addnewspage from './adminka/Addnewspage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDvmPrdgCaZQ1BqFiUpfaerO0JKeb7lQgk",
@@ -33,7 +34,6 @@ function App() {
         <Route path="/admin">
           <AdminPage/>
         </Route>
-      
       </Switch>
     </Router>
 

@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Addnewspage from './Addnewspage';
-import Newspage from './Newspage';
+import NewsListpage from './NewsListpage';
 import Categorypage from './Categorypage';
+import Editnews from './Editnews';
 
 
 const Dashboard = () => {
-    const { addNews, newsList, category } = useSelector(state => state.pages);
+    const { addNews, newsList, category , editNewsId} = useSelector(state => state.pages);
 
     return (
         <>
@@ -20,8 +21,9 @@ const Dashboard = () => {
                 <div className="content">
 
                     {addNews && <Addnewspage />}
-                    {newsList && <Newspage />}
+                    {newsList && <NewsListpage />}
                     {category && <Categorypage />}
+                    {editNewsId &&  <Editnews />}
 
                 </div>
             </div>
