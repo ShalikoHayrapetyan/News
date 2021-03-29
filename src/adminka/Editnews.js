@@ -43,43 +43,75 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Editnews = () => {
-    const {editNewsId} = useSelector(state => state.pages);
+    const { editNewsId } = useSelector(state => state.pages);
     const classes = useStyles();
     const [data, setData] = useState({})
+    const [title, setTitle] = useState("");
+    const [shortDesc, setShortDesc] = useState("");
+    const [desc, setDesc] = useState("");
+    const [category, setCategory] = useState("")
 
-     useEffect(()=>{
-        db.collection("news").where("id", "==", editNewsId )
 
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => { 
-                setData(doc.data() )
+
+    useEffect(() => {
+        db.collection("news").where("id", "==", editNewsId)
+
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    setData(doc.data())
+                    setTitle(doc.data().title)
+                    setShortDesc(doc.data().short_desc)
+                    setDesc(doc.data().desc)
+                    setCategory(doc.data().category)
+
+
+                });
+
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
             });
-           
-        })
-        .catch((error) => {
-            console.log("Error getting documents: ", error);
-        });
 
-     }, [])
-   
-    
-    
+    }, [])
+
+    const updateNews = () => {
+
+        const washingtonRef = db.collection("news").doc(data.id);
+
+        // Set the "capital" field of the city 'DC'
+        return washingtonRef.update({
+            title,
+            short_desc: shortDesc,
+            desc,
+            category
+        })
+            .then(() => {
+                console.log("Document successfully updated!");
+                window.location.reload()
+
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+    }
+
+
     return (
-        
+
         <div className="add-news">
             <h2 className="h2">Add new post</h2>
 
             <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
                 <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
                 <Select
-               
+
                     native
-                    value={data.category}
-                 //   onChange={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                     label="New categories"
                     inputProps={{
-                        shrink: true,
                         name: 'category',
                         id: 'outlined-age-native-simple',
                     }}
@@ -93,8 +125,8 @@ const Editnews = () => {
             </FormControl>
 
             <TextField
-                value={data.title}
-              //  onChange={(e) => setTitle(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 id="outlined-full-width"
                 label="Title"
                 style={{ margin: 15 }}
@@ -107,8 +139,8 @@ const Editnews = () => {
             />
 
             <TextField
-                value={data.short_desc}
-               // onChange={(e) => setShortDesc(e.target.value)}
+                value={shortDesc}
+                onChange={(e) => setShortDesc(e.target.value)}
                 id="outlined-multiline-static"
                 label="Short description"
                 fullWidth
@@ -122,8 +154,8 @@ const Editnews = () => {
             />
 
             <TextField
-                value={data.desc}
-              //  onChange={(e) => setDesc(e.target.value)}
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
                 id="outlined-multiline-static"
                 label="Description"
                 fullWidth
@@ -138,7 +170,7 @@ const Editnews = () => {
 
             <div className={classes.root}>
                 <input
-            //    onChange={(e) => setImage(e.target.files[0])}
+                    //    onChange={(e) => setImage(e.target.files[0])}
                     accept="image/*"
                     name="img"
                     className={classes.input}
@@ -149,21 +181,21 @@ const Editnews = () => {
                 <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">Upload</Button> choose image
                 </label>
-                
+
             </div>
 
             <div className="save-btn">
                 <Button
-                   // onClick={addNews}
+                    onClick={updateNews}
                     variant="contained"
                     color="primary"
                     size="large"
                     className={classes.button}
                     startIcon={<SaveIcon />}
-                >Save</Button>
+                >Update</Button>
             </div>
         </div>
-    ) 
+    )
 }
 
 export default Editnews

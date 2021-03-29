@@ -1,9 +1,151 @@
-const Categorypage = () => {
-    return (
-        <div>
-            Categorypage
 
-        </div>
+
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
+import { db } from '../App';
+import AddCategoryForm from './AddCategoryForm';
+import { useDispatch, useSelector } from 'react-redux';
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    demo: {
+        backgroundColor: theme.palette.background.paper,
+    },
+    title: {
+        margin: theme.spacing(4, 0, 2),
+    },
+
+}));
+
+const Categorypage = () => {
+    let CategoryState=useSelector(state => state.pages.CategoryState)
+    const dispatch = useDispatch();
+    const classes = useStyles();
+    const [dense, setDense] = useState(false);
+    const [secondary, setSecondary] = useState(false);
+
+    let [allCategoriesData, setallCategoriesData] = useState([])
+
+    // const delCategory = (id) =>{
+    //     db.collection("category").doc(id).delete().then(() => {
+    //         setDelete(id)
+    //     }).catch((error) => {
+    //         console.error("Error removing document: ", error);
+    //     });
+    // }
+
+
+    useEffect(() => {
+        db.collection("categories")
+            .get()
+            .then((querySnapshot) => {
+                const all = []
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    all.push(doc.data())
+                });
+                setallCategoriesData(all)
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+    }, [])
+
+   const  editCategoryState = () =>{
+
+        dispatch({
+            type: 'addNewCategory',
+            payload: {
+                page :true      
+            }
+        });
+   }
+
+   console.log(CategoryState)
+
+
+    return (
+        <>
+            <div className={classes.root}>
+
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h6" className={classes.title}>
+                        My categories
+          </Typography>
+                    <div className={classes.demo}>
+                        <List dense={dense}>
+
+                            {allCategoriesData.map((el) => {
+                                return (
+
+                                    <ListItem key={el.title}>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FolderIcon />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={el.title}
+                                            secondary={secondary ? 'Secondary text' : null}
+
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton edge="end" aria-label="delete">
+                                                <DeleteIcon
+                                                //onClick={delCategory}
+                                                />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+
+
+
+
+                                )
+                            })
+                            }
+                        </List>
+                    </div>
+                </Grid>
+
+            </div>
+
+            { CategoryState ? 
+            <div className={classes.root}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={editCategoryState}
+
+                    >
+                        Add new category
+            </Button>
+                </div> : <AddCategoryForm />
+}
+                
+
+        </>
     )
 }
 
