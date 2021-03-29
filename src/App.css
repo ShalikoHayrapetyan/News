@@ -3,8 +3,117 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 *{
   box-sizing: border-box;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.headerNav__top{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 20px 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.header__botom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+  padding: 5px 0;
+}
+
+.navBar {
+  display: flex;
+}
+
+.navBar a{
+  padding: 8px 0;
+  margin-right: 32px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+}
+
+.navBar a:hover {
+  text-decoration: underline;
+}
+
+.date {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+
+/* Footer */
+.footerBar {
+  background-color: #2E3339;
+  color: rgba(255, 255,255, 0.85);
+  padding: 40px 0;
+  margin-top: 60px;
+  font-weight: 400;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-menu a{
+  padding: 8px 0;
+  margin-right: 32px;
+  font-size: 16px;  
+  text-decoration: none;
+  color: rgba(255, 255,255, 0.85);
+  font-weight: 400;
+}
+
+.footer-menu a:hover {
+  text-decoration: underline;
+}
+
+.copy {
+  font-size: 14px;
+}
+
+
+.site-content {
+  display: flex;
+  justify-content: space-between; 
+  margin-top: 50px;
+}
+
+.main {
+  width: calc(100% - 200px);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.aside {
+  width: 200px;
+}
+
+.article {
+  margin-right: 20px;
+  margin-bottom: 30px;
+  width: 31%;
+}
+
+.article .MuiTypography-h5{
+  font-size: 20px;
 }

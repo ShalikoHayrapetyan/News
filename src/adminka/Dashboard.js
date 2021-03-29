@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -9,7 +9,7 @@ import Editnews from './Editnews';
 
 
 const Dashboard = () => {
-    const { addNews, newsList, category , editNewsId} = useSelector(state => state.pages);
+    const { addNews, newsList, category, editNewsId } = useSelector(state => state.pages);
 
     return (
         <>
@@ -23,7 +23,7 @@ const Dashboard = () => {
                     {addNews && <Addnewspage />}
                     {newsList && <NewsListpage />}
                     {category && <Categorypage />}
-                    {editNewsId &&  <Editnews />}
+                    {editNewsId && <Editnews />}
 
                 </div>
             </div>

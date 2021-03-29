@@ -8,8 +8,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import HomePage from './HomePage';
-import Addnewspage from './adminka/Addnewspage';
+import HomePage from './components/HomePage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDvmPrdgCaZQ1BqFiUpfaerO0JKeb7lQgk",
@@ -29,10 +28,10 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-         <HomePage />
+          <HomePage />
         </Route>
         <Route path="/admin">
-          <AdminPage/>
+          <AdminPage />
         </Route>
       </Switch>
     </Router>
