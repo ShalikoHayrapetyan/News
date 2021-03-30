@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../App'
+import { Redirect } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +45,10 @@ const Addnewspage = () => {
     const [desc, setDesc] = useState("");
     const [image, setImage] = useState("");
     const [category, setCategory] = useState("")
+    const [allCategoriesData, setallCategoriesData] = useState([])
+
+
+
     const addNews = () => {
         let uniqId=uuidv4()
         db.collection("news").doc(uniqId).set({
@@ -59,7 +64,7 @@ const Addnewspage = () => {
         })
             .then(() => {
                 console.log("Document successfully written!");
-                window.location.reload()
+                <Redirect to="/admin/newsList" />
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -83,10 +88,9 @@ const Addnewspage = () => {
                     }}
                 >
                     <option aria-label="None" value="" />
-                    <option value={"Sport"}>Sport</option>
-                    <option value={"Politics"}>Politics</option>
-                    <option value={"Medicine"}>Medicine</option>
-                    <option value={"Business"}>Business</option>
+                    {
+                        allCategoriesData.map((cat) => <option key={cat.id} value={cat.title}>{cat.title}</option>)
+                    }
                 </Select>
             </FormControl>
 

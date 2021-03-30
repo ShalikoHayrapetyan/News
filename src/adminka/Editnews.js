@@ -50,10 +50,26 @@ const Editnews = () => {
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
     const [category, setCategory] = useState("")
+    const [allCategoriesData, setallCategoriesData] = useState([])
 
 
+    
 
     useEffect(() => {
+        db.collection("categories")
+        .get()
+        .then((querySnapshot) => {
+            const all = []
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                all.push(doc.data())
+            });
+            setallCategoriesData(all)
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+
         db.collection("news").where("id", "==", editNewsId)
 
             .get()
@@ -117,10 +133,9 @@ const Editnews = () => {
                     }}
                 >
                     <option aria-label="None" value="" />
-                    <option value={"Sport"}>Sport</option>
-                    <option value={"Politics"}>Politics</option>
-                    <option value={"Medicine"}>Medicine</option>
-                    <option value={"Business"}>Business</option>
+                    {
+                        allCategoriesData.map((cat) => <option key={cat.id} value={cat.title}>{cat.title}</option>)
+                    }
                 </Select>
             </FormControl>
 

@@ -1,47 +1,25 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useParams,
+    useRouteMatch
+} from "react-router-dom";
 
 const Sidebar = () => {
-    const dispatch = useDispatch();
-
-
-    const hrefPage = (pageType) => {
-        if (pageType === 'addNews') {
-            dispatch({
-                type: 'addNews',
-                payload: {
-                    page: true,
-                }
-            });
-        }
-        if (pageType === 'newsList') {
-            dispatch({
-                type: 'newsList',
-                payload: {
-                    page: true,
-                }
-            });
-        }
-        if (pageType === 'category') {
-            dispatch({
-                type: 'category',
-                payload: {
-                    page: true,
-                }
-            });
-        }
-    }
+    let { url } = useRouteMatch();
 
     return (
         <div className="sidebar">
             <nav className="navbar">
-                <li>Home</li>
-                <li onClick={() => hrefPage('addNews')}>Add news</li>
-                <li onClick={() => hrefPage('newsList')}>News list</li>
-                <li onClick={() => hrefPage('category')}>News categories</li>
+                <li><Link to={`${url}`}>Home</Link></li>
+                <li><Link to={`${url}/addNews`}>Add news</Link></li>
+                <li><Link to={`${url}/newsList`}>News list</Link></li>
+                <li><Link to={`${url}/newsCategories`}>News categories</Link></li>
             </nav>
         </div>
     )
 }
-
 export default Sidebar;

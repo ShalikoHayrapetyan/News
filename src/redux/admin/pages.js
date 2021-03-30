@@ -47,7 +47,7 @@ const pages = (state = initialState, action) => {
                     return {
                         addNews: false,
                         newsList: false,
-                        category:false,
+                        category:true,
                          editNewsId: null,
                          CategoryState:action.payload.page
                        

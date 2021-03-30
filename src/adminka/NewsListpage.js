@@ -34,7 +34,6 @@ const NewsListpage = () => {
 
 
     let [allNewsData, setallNewsData] = useState("Please Wait")
-    let [isDelete, setDelete] = useState("")
     useEffect(() => {
         db.collection("news")
             .get()
@@ -49,11 +48,11 @@ const NewsListpage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-    }, [isDelete])
+
+    }, [allNewsData])
 
     const delNewsInDb = (id) =>{
         db.collection("news").doc(id).delete().then(() => {
-            setDelete(id)
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });

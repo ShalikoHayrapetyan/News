@@ -39,22 +39,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Categorypage = () => {
-    let CategoryState=useSelector(state => state.pages.CategoryState)
     const dispatch = useDispatch();
     const classes = useStyles();
     const [dense, setDense] = useState(false);
     const [secondary, setSecondary] = useState(false);
+    const [isEditing, setisEditing] = useState(false)
+    let [editedName, setEditedName] = useState("")
 
     let [allCategoriesData, setallCategoriesData] = useState([])
-
-    // const delCategory = (id) =>{
-    //     db.collection("category").doc(id).delete().then(() => {
-    //         setDelete(id)
-    //     }).catch((error) => {
-    //         console.error("Error removing document: ", error);
-    //     });
-    // }
-
 
     useEffect(() => {
         db.collection("categories")
@@ -70,20 +62,42 @@ const Categorypage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-    }, [])
+    }, [allCategoriesData])
 
-   const  editCategoryState = () =>{
+    const editCategoryState = () => {
 
         dispatch({
             type: 'addNewCategory',
             payload: {
-                page :true      
+                page: true
             }
         });
-   }
+    }
 
-   console.log(CategoryState)
+    const editCategoryNameSaveBtn = (id) => {
+        const washingtonRef = db.collection("categories").doc(id);
+        return washingtonRef.update({
+            title: editedName
+        })
+            .then(() => {
+                console.log("Document successfully updated!");
+                setisEditing(null)
 
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+            
+    }
+
+    const delCategoryInDb = (id) => {
+        db.collection("categories").doc(id).delete().then(() => {
+            //  setDelete(id)
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+        });
+    }
 
     return (
         <>
@@ -105,18 +119,34 @@ const Categorypage = () => {
                                                 <FolderIcon />
                                             </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText
+
+                                        { isEditing == el.id ? <div> 
+                                            <input
+                                            type="text"
+                                            onChange={(e) => setEditedName(e.target.value)}
+                                            value={editedName}
+                                          
+                                         />
+                                         <Button onClick={() => editCategoryNameSaveBtn(el.id)}>Save</Button>
+                                        </div> : <><ListItemText
                                             primary={el.title}
                                             secondary={secondary ? 'Secondary text' : null}
-
                                         />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge="end" aria-label="delete">
-                                                <DeleteIcon
-                                                //onClick={delCategory}
-                                                />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
+                                           
+                                           <ListItemSecondaryAction>
+                                                <Button onClick={() =>{ setEditedName(el.title);  setisEditing(el.id)} }>Edit</Button>
+                                                <IconButton 
+                                                  onClick={() => delCategoryInDb(el.id)}
+                                                edge="end" aria-label="delete">
+                                                    <DeleteIcon
+                                                      
+                                                    />
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </>
+                                        }
+                                         
+
                                     </ListItem>
 
 
@@ -130,20 +160,18 @@ const Categorypage = () => {
                 </Grid>
 
             </div>
-
-            { CategoryState ? 
             <div className={classes.root}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={editCategoryState}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={editCategoryState}
 
-                    >
-                        Add new category
+                >
+                    Add new category
             </Button>
-                </div> : <AddCategoryForm />
-}
-                
+            </div> :
+
+
 
         </>
     )
