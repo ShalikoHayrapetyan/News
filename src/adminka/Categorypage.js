@@ -1,18 +1,14 @@
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -39,16 +35,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Categorypage = () => {
+
     const dispatch = useDispatch();
     const classes = useStyles();
     const [dense, setDense] = useState(false);
     const [secondary, setSecondary] = useState(false);
     const [isEditing, setisEditing] = useState(false)
+    let [isDeleting, setisDeleting] = useState(false)
+
     let [editedName, setEditedName] = useState("")
-
     let [allCategoriesData, setallCategoriesData] = useState([])
-
+    let categoryState = useSelector((state) => state.pages.categoryState)
     useEffect(() => {
+        const abortController = new AbortController();
         db.collection("categories")
             .get()
             .then((querySnapshot) => {
@@ -61,18 +60,13 @@ const Categorypage = () => {
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-            });
-    }, [allCategoriesData])
+            })
 
-    const editCategoryState = () => {
-
-        dispatch({
-            type: 'addNewCategory',
-            payload: {
-                page: true
-            }
-        });
-    }
+        return () => {
+            abortController.abort();
+            console.log('aborting...');
+        };
+    }, [isEditing, categoryState, isDeleting])
 
     const editCategoryNameSaveBtn = (id) => {
         const washingtonRef = db.collection("categories").doc(id);
@@ -88,21 +82,29 @@ const Categorypage = () => {
                 // The document probably doesn't exist.
                 console.error("Error updating document: ", error);
             });
-            
-    }
 
+    }
     const delCategoryInDb = (id) => {
         db.collection("categories").doc(id).delete().then(() => {
-            //  setDelete(id)
+            setisDeleting(!isDeleting)
         }).catch((error) => {
             console.error("Error removing document: ", error);
+        });
+
+    }
+
+    const editCategoryState = () => {
+        dispatch({
+            type: 'addNewCategory',
+            payload: {
+                page: true
+            }
         });
     }
 
     return (
         <>
             <div className={classes.root}>
-
                 <Grid item xs={12} md={6}>
                     <Typography variant="h6" className={classes.title}>
                         My categories
@@ -120,37 +122,32 @@ const Categorypage = () => {
                                             </Avatar>
                                         </ListItemAvatar>
 
-                                        { isEditing == el.id ? <div> 
+                                        { isEditing == el.id ? <div>
                                             <input
-                                            type="text"
-                                            onChange={(e) => setEditedName(e.target.value)}
-                                            value={editedName}
-                                          
-                                         />
-                                         <Button onClick={() => editCategoryNameSaveBtn(el.id)}>Save</Button>
+                                                type="text"
+                                                onChange={(e) => setEditedName(e.target.value)}
+                                                value={editedName}
+
+                                            />
+                                            <Button onClick={() => editCategoryNameSaveBtn(el.id)}>Save</Button>
                                         </div> : <><ListItemText
                                             primary={el.title}
                                             secondary={secondary ? 'Secondary text' : null}
                                         />
-                                           
-                                           <ListItemSecondaryAction>
-                                                <Button onClick={() =>{ setEditedName(el.title);  setisEditing(el.id)} }>Edit</Button>
-                                                <IconButton 
-                                                  onClick={() => delCategoryInDb(el.id)}
-                                                edge="end" aria-label="delete">
+
+                                            <ListItemSecondaryAction>
+                                                <Button onClick={() => { setEditedName(el.title); setisEditing(el.id) }}>Edit</Button>
+                                                <IconButton
+                                                    onClick={() => delCategoryInDb(el.id)}
+                                                    edge="end" aria-label="delete">
                                                     <DeleteIcon
-                                                      
+
                                                     />
                                                 </IconButton>
                                             </ListItemSecondaryAction>
                                         </>
                                         }
-                                         
-
                                     </ListItem>
-
-
-
 
                                 )
                             })
@@ -160,16 +157,20 @@ const Categorypage = () => {
                 </Grid>
 
             </div>
-            <div className={classes.root}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={editCategoryState}
 
-                >
-                    Add new category
+
+            {
+                categoryState ? <AddCategoryForm /> : <div className={classes.root}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={editCategoryState}
+
+                    >
+                        Add new category
             </Button>
-            </div> :
+                </div>
+            }
 
 
 

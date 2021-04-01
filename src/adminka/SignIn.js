@@ -58,7 +58,6 @@ export default function SignIn() {
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
-
             if (user) {
                 dispatch({
                     type: 'signIn',
@@ -66,6 +65,7 @@ export default function SignIn() {
                         adminEmail: user.email,
                     }
                 });
+
             }
 
         });

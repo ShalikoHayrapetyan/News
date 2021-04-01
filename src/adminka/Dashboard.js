@@ -34,6 +34,9 @@ const Dashboard = () => {
                         <Route path={`${path}/newsList`}>
                             <NewsListpage />
                         </Route>
+                        <Route path={`${path}/editNews`}>
+                           <Editnews />
+                        </Route>
                         <Route path={`${path}/newsCategories`}>
                             <Categorypage />
                         </Route>

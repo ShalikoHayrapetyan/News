@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -7,8 +7,8 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../App'
-import { Redirect } from 'react-router';
+import { db, storage } from '../App'
+import { Redirect, useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,15 +39,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Addnewspage = () => {
+    let history = useHistory()
     const classes = useStyles();
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState(null);
     const [category, setCategory] = useState("")
-    const [allCategoriesData, setallCategoriesData] = useState([])
+    const [allCategoriesData, setallCategoriesData] = useState([]) 
+    useEffect(() => {
 
-
+        const abortController = new AbortController();
+        db.collection("categories")
+            .get()
+            .then((querySnapshot) => {
+                const all = []
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    all.push(doc.data())
+                });
+                setallCategoriesData(all)
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+            return () => {
+                abortController.abort();
+                console.log('aborting...');
+              };
+    }, [])
 
     const addNews = () => {
         let uniqId=uuidv4()
@@ -61,15 +81,35 @@ const Addnewspage = () => {
             date: new Date().toDateString(),
             category:category
 
-        })
-            .then(() => {
+        }).then(() => {
                 console.log("Document successfully written!");
-                <Redirect to="/admin/newsList" />
+                history.push(`/admin/newsList`)
+                
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
             });
+            setTitle("")
+            setShortDesc("")
+            setDesc("")
+            setImage("")
+            setCategory("")
+
+        
     }
+    const imgHandleUpload = (e) => {
+        const imgFormat = e.target.files[0].type.split("/").pop()
+        storage.ref()
+            .child(`images/${uuidv4()}.${imgFormat}`)
+            .put(e.target.files[0])
+            .then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    console.log(downloadURL)
+                    setImage(downloadURL)
+                });
+            });
+    }
+
 
     return (
         <div className="add-news">
@@ -137,7 +177,7 @@ const Addnewspage = () => {
 
             <div className={classes.root}>
                 <input
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={imgHandleUpload}
                     accept="image/*"
                     name={image}
                     className={classes.input}
@@ -148,7 +188,7 @@ const Addnewspage = () => {
                 <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">Upload</Button> choose image
                 </label>
-                <img src={image} />
+                <img width="200" src={image} />
             </div>
 
             <div className="save-btn">

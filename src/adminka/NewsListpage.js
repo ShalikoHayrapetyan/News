@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { db } from '../App';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Addnewspage from './Addnewspage';
 import { useDispatch } from 'react-redux';
+import { useHistory, useRouteMatch } from 'react-router';
 
 const useStyles = makeStyles({
     root: {
@@ -26,15 +27,16 @@ const useStyles = makeStyles({
 });
 
 
-
-
 const NewsListpage = () => {
+    let history = useHistory()
     const classes = useStyles();
     const dispatch = useDispatch();
-
-
     let [allNewsData, setallNewsData] = useState("Please Wait")
+    let [isDeleting, setisDeleting] = useState(false)
+
+
     useEffect(() => {
+        const abortController = new AbortController();
         db.collection("news")
             .get()
             .then((querySnapshot) => {
@@ -44,41 +46,49 @@ const NewsListpage = () => {
                     all.push(doc.data())
                 });
                 setallNewsData(all)
+
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
 
-    }, [allNewsData])
+        return () => {
+            abortController.abort();
+            console.log('aborting...');
+        };
 
-    const delNewsInDb = (id) =>{
+    }, [isDeleting,])
+
+    const delNewsInDb = (id) => {
         db.collection("news").doc(id).delete().then(() => {
+            setisDeleting(!isDeleting)
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
     }
     const startEdit = (id) => {
+
+        history.push(`/admin/editNews`);
         dispatch({
             type: 'editingNews',
             payload: {
-                id,       
+                id,
             }
         });
     }
-
     return (
         <>
             <div className={classes.cardList}>
                 {Array.isArray(allNewsData) ? allNewsData.map((el) => {
                     return (
-                       
+
                         <Card className={classes.root} key={el.id}>
                             <CardActionArea>
                                 <CardMedia
                                     component="img"
                                     alt={el.title}
                                     height="140"
-                                    image="/static/images/cards/contemplative-reptile.jpg"
+                                    image={el.image}
                                     title={el.title}
                                 />
                                 <CardContent>
@@ -91,10 +101,9 @@ const NewsListpage = () => {
                                 </CardContent>
                             </CardActionArea>
                             <CardActions className={classes.btnDiv}>
-                                <Button size="small" color="primary" onClick={() =>startEdit(el.id)} >
-                               Edit
-                                    
-              </Button>
+                                <Button size="small" color="primary" onClick={() => startEdit(el.id)} >
+                                    Edit
+                                    </Button>
                                 <Button size="small" color="secondary" onClick={() => delNewsInDb(el.id)} >
                                     Delete
               </Button>
@@ -107,12 +116,9 @@ const NewsListpage = () => {
                     : allNewsData}
             </div>
         </>
-
-
-
-
     )
 
 }
+
 
 export default NewsListpage;

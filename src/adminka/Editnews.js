@@ -7,8 +7,9 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../App'
+import { db, storage } from '../App'
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
-
 const Editnews = () => {
     const { editNewsId } = useSelector(state => state.pages);
     const classes = useStyles();
@@ -49,26 +47,25 @@ const Editnews = () => {
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
+    const [image, setImage] = useState("");
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
-
-
-    
+    let history = useHistory()
 
     useEffect(() => {
         db.collection("categories")
-        .get()
-        .then((querySnapshot) => {
-            const all = []
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                all.push(doc.data())
+            .get()
+            .then((querySnapshot) => {
+                const all = []
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    all.push(doc.data())
+                });
+                setallCategoriesData(all)
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
             });
-            setallCategoriesData(all)
-        })
-        .catch((error) => {
-            console.log("Error getting documents: ", error);
-        });
 
         db.collection("news").where("id", "==", editNewsId)
 
@@ -80,8 +77,7 @@ const Editnews = () => {
                     setShortDesc(doc.data().short_desc)
                     setDesc(doc.data().desc)
                     setCategory(doc.data().category)
-
-
+                    setImage(doc.data().image)
                 });
 
             })
@@ -94,22 +90,34 @@ const Editnews = () => {
     const updateNews = () => {
 
         const washingtonRef = db.collection("news").doc(data.id);
-
-        // Set the "capital" field of the city 'DC'
         return washingtonRef.update({
             title,
             short_desc: shortDesc,
             desc,
-            category
+            category,
+            image
         })
             .then(() => {
                 console.log("Document successfully updated!");
-                window.location.reload()
+                history.push(`/admin/newsList`)
 
             })
             .catch((error) => {
                 // The document probably doesn't exist.
                 console.error("Error updating document: ", error);
+            });
+
+    }
+    const imgHandleUpload = (e) => {
+        const imgFormat = e.target.files[0].type.split("/").pop()
+        storage.ref()
+            .child(`images/${uuidv4()}.${imgFormat}`)
+            .put(e.target.files[0])
+            .then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    console.log(downloadURL)
+                    setImage(downloadURL)
+                });
             });
     }
 
@@ -117,7 +125,7 @@ const Editnews = () => {
     return (
 
         <div className="add-news">
-            <h2 className="h2">Add new post</h2>
+            <h2 className="h2">Edit post</h2>
 
             <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
                 <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
@@ -185,18 +193,19 @@ const Editnews = () => {
 
             <div className={classes.root}>
                 <input
-                    //    onChange={(e) => setImage(e.target.files[0])}
+                    onChange={imgHandleUpload}
                     accept="image/*"
-                    name="img"
+                    name={image}
                     className={classes.input}
                     id="contained-button-file"
                     multiple
                     type="file"
                 />
                 <label htmlFor="contained-button-file">
+
                     <Button variant="contained" color="primary" component="span">Upload</Button> choose image
                 </label>
-
+                <img width="300" src={image} />
             </div>
 
             <div className="save-btn">
@@ -207,7 +216,7 @@ const Editnews = () => {
                     size="large"
                     className={classes.button}
                     startIcon={<SaveIcon />}
-                >Update</Button>
+                >Update News</Button>
             </div>
         </div>
     )

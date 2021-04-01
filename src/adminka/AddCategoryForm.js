@@ -34,7 +34,6 @@ const AddCategoryForm = () => {
                 console.error("Error writing document: ", error);
             });
 
-
         dispatch({
             type: 'addNewCategory',
             payload: {
