@@ -120,7 +120,7 @@ const Editnews = () => {
                 });
             });
     }
-
+ console.log(category.doc)
 
     return (
 

@@ -11,7 +11,7 @@ import {
 import HomePage from './components/HomePage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDvmPrdgCaZQ1BqFiUpfaerO0JKeb7lQgk",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "news-aca.firebaseapp.com",
   projectId: "news-aca",
   storageBucket: "news-aca.appspot.com",
