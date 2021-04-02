@@ -33,13 +33,16 @@ const NewsListpage = () => {
     const dispatch = useDispatch();
     let [allNewsData, setallNewsData] = useState("Please Wait")
     let [isDeleting, setisDeleting] = useState(false)
-
+    const [isUnmounted, setIsUnmounted] = useState(false);
+    useEffect(() => () => setIsUnmounted(true), [])
+    
 
     useEffect(() => {
         const abortController = new AbortController();
         db.collection("news")
             .get()
             .then((querySnapshot) => {
+                if (!isUnmounted) return
                 const all = []
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
