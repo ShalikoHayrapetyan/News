@@ -41,18 +41,22 @@ const useStyles = makeStyles((theme) => ({
 const Addnewspage = () => {
     let history = useHistory()
     const classes = useStyles();
+    const [isUnmounted, setIsUnmounted] = useState(false);
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
     const [image, setImage] = useState(null);
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([]) 
+
+    useEffect(() => () => setIsUnmounted(true), [])
+
     useEffect(() => {
 
-        const abortController = new AbortController();
         db.collection("categories")
             .get()
             .then((querySnapshot) => {
+                if (isUnmounted) return;
                 const all = []
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
@@ -64,7 +68,6 @@ const Addnewspage = () => {
                 console.log("Error getting documents: ", error);
             });
             return () => {
-                abortController.abort();
                 console.log('aborting...');
               };
     }, [])

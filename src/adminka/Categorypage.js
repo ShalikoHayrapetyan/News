@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import { db } from '../App';
 import AddCategoryForm from './AddCategoryForm';
 import { useDispatch, useSelector } from 'react-redux';
+import LinearIndeterminate from './Loading';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -39,18 +40,22 @@ const Categorypage = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const [dense, setDense] = useState(false);
+    const [isUnmounted, setIsUnmounted] = useState(false);
     const [secondary, setSecondary] = useState(false);
     const [isEditing, setisEditing] = useState(false)
     let [isDeleting, setisDeleting] = useState(false)
 
     let [editedName, setEditedName] = useState("")
-    let [allCategoriesData, setallCategoriesData] = useState([])
+    let [allCategoriesData, setallCategoriesData] = useState(<LinearIndeterminate />)
     let categoryState = useSelector((state) => state.pages.categoryState)
+    
+    useEffect(() => () => setIsUnmounted(true), [])
+
     useEffect(() => {
-        const abortController = new AbortController();
         db.collection("categories")
             .get()
             .then((querySnapshot) => {
+                if (isUnmounted) return;
                 const all = []
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
@@ -63,7 +68,6 @@ const Categorypage = () => {
             })
 
         return () => {
-            abortController.abort();
             console.log('aborting...');
         };
     }, [isEditing, categoryState, isDeleting])
@@ -112,7 +116,7 @@ const Categorypage = () => {
                     <div className={classes.demo}>
                         <List dense={dense}>
 
-                            {allCategoriesData.map((el) => {
+                            {  Array.isArray(allCategoriesData) ? allCategoriesData.map((el) => {
                                 return (
 
                                     <ListItem key={el.title}>
@@ -150,7 +154,7 @@ const Categorypage = () => {
                                     </ListItem>
 
                                 )
-                            })
+                            }): allCategoriesData
                             }
                         </List>
                     </div>
