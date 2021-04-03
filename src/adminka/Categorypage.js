@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import { db } from '../App';
 import AddCategoryForm from './AddCategoryForm';
 import { useDispatch, useSelector } from 'react-redux';
+import LinearIndeterminate from './Loading';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -45,7 +46,7 @@ const Categorypage = () => {
     let [isDeleting, setisDeleting] = useState(false)
 
     let [editedName, setEditedName] = useState("")
-    let [allCategoriesData, setallCategoriesData] = useState([])
+    let [allCategoriesData, setallCategoriesData] = useState(<LinearIndeterminate />)
     let categoryState = useSelector((state) => state.pages.categoryState)
     
     useEffect(() => () => setIsUnmounted(true), [])
@@ -115,7 +116,7 @@ const Categorypage = () => {
                     <div className={classes.demo}>
                         <List dense={dense}>
 
-                            {allCategoriesData.map((el) => {
+                            {  Array.isArray(allCategoriesData) ? allCategoriesData.map((el) => {
                                 return (
 
                                     <ListItem key={el.title}>
@@ -153,7 +154,7 @@ const Categorypage = () => {
                                     </ListItem>
 
                                 )
-                            })
+                            }): allCategoriesData
                             }
                         </List>
                     </div>

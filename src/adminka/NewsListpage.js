@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Addnewspage from './Addnewspage';
 import { useDispatch } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
+import LinearIndeterminate from './Loading';
 
 const useStyles = makeStyles({
     root: {
@@ -31,7 +32,7 @@ const NewsListpage = () => {
     let history = useHistory()
     const classes = useStyles();
     const dispatch = useDispatch();
-    let [allNewsData, setallNewsData] = useState("Please Wait")
+    let [allNewsData, setallNewsData] = useState(  <LinearIndeterminate />)
     let [isDeleting, setisDeleting] = useState(false)
     const [isUnmounted, setIsUnmounted] = useState(false);
     useEffect(() => () => setIsUnmounted(true), [])
@@ -42,7 +43,7 @@ const NewsListpage = () => {
         db.collection("news")
             .get()
             .then((querySnapshot) => {
-                if (!isUnmounted) return
+                if (isUnmounted) return
                 const all = []
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots

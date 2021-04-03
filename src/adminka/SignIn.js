@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useDispatch } from 'react-redux';
 import { auth } from "../App"
+import LinearIndeterminate from './Loading';
 
 function Copyright() {
     return (
@@ -50,6 +51,8 @@ export default function SignIn() {
 
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setisLoading] = useState(false);
+
 
     const classes = useStyles();
     //const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
@@ -58,6 +61,7 @@ export default function SignIn() {
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
+         
             if (user) {
                 dispatch({
                     type: 'signIn',
@@ -65,19 +69,16 @@ export default function SignIn() {
                         adminEmail: user.email,
                     }
                 });
-
             }
-
         });
     }, []);
 
     const handleSignInAdmin = (e) => {
+        
         e.preventDefault()
         auth.signInWithEmailAndPassword(login, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-
-
             })
             .catch((error) => {
                 var errorCode = error.code;
@@ -86,6 +87,8 @@ export default function SignIn() {
             });
 
     }
+
+    if(isLoading) return <LinearIndeterminate />
 
     return (
         <Container component="main" maxWidth="xs">

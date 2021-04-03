@@ -11,7 +11,6 @@ function AdminPage() {
   const localAdminEmail = useSelector(state => state.authReducer.adminEmail);
   return (
     <div>
-      
       {localAdminEmail ? <Dashboard /> : <SignIn />}
     </div>
   );
