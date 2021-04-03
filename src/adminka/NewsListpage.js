@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
+import firebase from 'firebase';
 import { db } from '../App';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,7 +28,6 @@ const useStyles = makeStyles({
     }
 });
 
-
 const NewsListpage = () => {
     let history = useHistory()
     const classes = useStyles();
@@ -36,11 +36,12 @@ const NewsListpage = () => {
     let [isDeleting, setisDeleting] = useState(false)
     const [isUnmounted, setIsUnmounted] = useState(false);
     useEffect(() => () => setIsUnmounted(true), [])
-    
 
     useEffect(() => {
         const abortController = new AbortController();
         db.collection("news")
+            .orderBy("timestamp")
+            //.limit(3)
             .get()
             .then((querySnapshot) => {
                 if (isUnmounted) return
@@ -49,17 +50,13 @@ const NewsListpage = () => {
                     // doc.data() is never undefined for query doc snapshots
                     all.push(doc.data())
                 });
-                setallNewsData(all)
+                setallNewsData(all.reverse())
+               
 
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-
-        return () => {
-            abortController.abort();
-            console.log('aborting...');
-        };
 
     }, [isDeleting,])
 
@@ -80,6 +77,7 @@ const NewsListpage = () => {
             }
         });
     }
+    
     return (
         <>
             <div className={classes.cardList}>

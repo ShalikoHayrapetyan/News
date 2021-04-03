@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import firebase from 'firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -42,12 +43,13 @@ const Addnewspage = () => {
     let history = useHistory()
     const classes = useStyles();
     const [isUnmounted, setIsUnmounted] = useState(false);
+    const [errors, setErrors] = useState(null);
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
     const [image, setImage] = useState(null);
     const [category, setCategory] = useState("")
-    const [allCategoriesData, setallCategoriesData] = useState([]) 
+    const [allCategoriesData, setallCategoriesData] = useState([])
 
     useEffect(() => () => setIsUnmounted(true), [])
 
@@ -67,38 +69,59 @@ const Addnewspage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-            return () => {
-                console.log('aborting...');
-              };
+        return () => {
+            console.log('aborting...');
+        };
     }, [])
 
-    const addNews = () => {
-        let uniqId=uuidv4()
-        db.collection("news").doc(uniqId).set({
-            title: title,
-            short_desc: shortDesc,
-            desc: desc,
-            id: uniqId,
-            like: 0,
-            image: image,
-            date: new Date().toDateString(),
-            category:category
 
-        }).then(() => {
+    const validateForm = () => {
+        let titleError = title.length < 5;
+        let categoryError = !category;
+        let shortDescError = shortDesc.length < 15;
+        let descError = desc.length < 30;
+        let error = titleError || categoryError || shortDescError || descError;
+
+
+        if (error) {
+            setErrors((oldState) => ({ ...oldState, titleError, categoryError, shortDescError, descError }))
+        }
+        else {
+            setErrors(null);
+        }
+
+        return error;
+    }
+
+    const addNews = () => {
+        if (!validateForm()) {
+            let uniqId = uuidv4()
+            db.collection("news").doc(uniqId).set({
+                title: title,
+                short_desc: shortDesc,
+                desc: desc,
+                id: uniqId,
+                like: 0,
+                image: image,
+                date: new Date().toDateString(),
+                category: category,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+
+            }).then(() => {
                 console.log("Document successfully written!");
                 history.push(`/admin/newsList`)
-                
+
             })
-            .catch((error) => {
-                console.error("Error writing document: ", error);
-            });
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
             setTitle("")
             setShortDesc("")
             setDesc("")
             setImage("")
             setCategory("")
+        }
 
-        
     }
     const imgHandleUpload = (e) => {
         const imgFormat = e.target.files[0].type.split("/").pop()
@@ -123,6 +146,7 @@ const Addnewspage = () => {
                 <Select
                     native
                     value={category}
+                    error={errors?.categoryError}
                     onChange={(e) => setCategory(e.target.value)}
                     label="New categories"
                     inputProps={{
@@ -142,6 +166,8 @@ const Addnewspage = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 id="outlined-full-width"
                 label="Title"
+                error={errors?.titleError}
+                helperText={errors?.titleError ? "Text must be more than 5 simbols" : null}
                 style={{ margin: 15 }}
                 placeholder="Type news title"
                 fullWidth
@@ -157,6 +183,8 @@ const Addnewspage = () => {
                 onChange={(e) => setShortDesc(e.target.value)}
                 id="outlined-multiline-static"
                 label="Short description"
+                error={errors?.shortDescError}
+                helperText={errors?.shortDescError ? "Text must be more than 15 simbols" : null}
                 fullWidth
                 multiline
                 style={{ margin: 15 }}
@@ -170,6 +198,8 @@ const Addnewspage = () => {
                 onChange={(e) => setDesc(e.target.value)}
                 id="outlined-multiline-static"
                 label="Description"
+                error={errors?.descError}
+                helperText={errors?.descError ? "Text must be more than 30 simbols" : null}
                 fullWidth
                 multiline
                 style={{ margin: 15 }}
@@ -180,7 +210,7 @@ const Addnewspage = () => {
 
             <div className={classes.root}>
                 <input
-                onChange={imgHandleUpload}
+                    onChange={imgHandleUpload}
                     accept="image/*"
                     name={image}
                     className={classes.input}

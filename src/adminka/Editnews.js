@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Editnews = () => {
+    console.log()
     const { editNewsId } = useSelector(state => state.pages);
     const classes = useStyles();
     const [data, setData] = useState({})
@@ -78,6 +79,7 @@ const Editnews = () => {
                     setDesc(doc.data().desc)
                     setCategory(doc.data().category)
                     setImage(doc.data().image)
+                    
                 });
 
             })
@@ -120,8 +122,7 @@ const Editnews = () => {
                 });
             });
     }
- console.log(category.doc)
-
+    
     return (
 
         <div className="add-news">

@@ -51,6 +51,7 @@ export default function SignIn() {
 
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const [isLoading, setisLoading] = useState(false);
 
 
@@ -61,7 +62,7 @@ export default function SignIn() {
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
-         
+
             if (user) {
                 dispatch({
                     type: 'signIn',
@@ -74,7 +75,7 @@ export default function SignIn() {
     }, []);
 
     const handleSignInAdmin = (e) => {
-        
+
         e.preventDefault()
         auth.signInWithEmailAndPassword(login, password)
             .then((userCredential) => {
@@ -84,11 +85,12 @@ export default function SignIn() {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode, errorMessage)
+                setError("Wrong email or password!!!")
             });
 
     }
 
-    if(isLoading) return <LinearIndeterminate />
+    if (isLoading) return <LinearIndeterminate />
 
     return (
         <Container component="main" maxWidth="xs">
@@ -126,6 +128,8 @@ export default function SignIn() {
                     >
                         Sign In
           </Button>
+                    {error && <span>{error}</span>}
+
                     <Grid container>
                         <Grid item xs>
                             {/* <Link href="#" variant="body2">
