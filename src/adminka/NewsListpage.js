@@ -38,9 +38,8 @@ const NewsListpage = () => {
     useEffect(() => () => setIsUnmounted(true), [])
 
     useEffect(() => {
-        const abortController = new AbortController();
         db.collection("news")
-            .orderBy("timestamp")
+            //.orderBy("timestamp")
             //.limit(3)
             .get()
             .then((querySnapshot) => {
@@ -51,8 +50,6 @@ const NewsListpage = () => {
                     all.push(doc.data())
                 });
                 setallNewsData(all.reverse())
-               
-
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);

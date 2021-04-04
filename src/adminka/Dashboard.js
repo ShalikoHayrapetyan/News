@@ -15,6 +15,7 @@ import {
     useRouteMatch,
 
 } from "react-router-dom";
+import AdminHomePage from './AdminHomePage';
 
 const Dashboard = () => {
     let { path } = useRouteMatch();
@@ -26,7 +27,7 @@ const Dashboard = () => {
                 <div className="content">
                     <Switch>
                         <Route exact path={path}>
-                            <h3>Home</h3>
+                         <AdminHomePage />
                         </Route>
                         <Route path={`${path}/addNews`}>
                             <Addnewspage />

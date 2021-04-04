@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useDispatch } from 'react-redux';
-import { auth } from "../App"
+import { auth, db } from "../App"
 import LinearIndeterminate from './Loading';
 
 function Copyright() {
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignIn() {
-
+    
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -62,29 +62,48 @@ export default function SignIn() {
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
-
             if (user) {
-                dispatch({
-                    type: 'signIn',
-                    payload: {
-                        adminEmail: user.email,
-                    }
-                });
-            }
+                db.collection("users").where("userName", "==", user.email)
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            dispatch({
+                                type: 'signIn',
+                                payload: {
+                                    adminEmail: user.email,
+                                    role: doc.data().role
+                                }
+                            });
+
+                        })
+                    })
+                }
         });
     }, []);
 
     const handleSignInAdmin = (e) => {
-
         e.preventDefault()
-        auth.signInWithEmailAndPassword(login, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-            })
-            .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorCode, errorMessage)
+        let role = "111"
+        db.collection("users").where("userName", "==", login)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    role = doc.data().role
+                    if (role == "admin") {
+                        auth.signInWithEmailAndPassword(login, password)
+                            .then((userCredential) => {
+                                const user = userCredential.user;
+                            })
+                            .catch((error) => {
+                                var errorCode = error.code;
+                                var errorMessage = error.message;
+                                console.log(errorCode, errorMessage)
+                                setError("Wrong email or password!!!")
+                            });
+                    } else alert("Sorry but yor aren't admin")
+                })
+            }).catch((error) => {
+                console.log("Error getting documents: ", error);
                 setError("Wrong email or password!!!")
             });
 

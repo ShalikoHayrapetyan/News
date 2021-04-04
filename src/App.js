@@ -9,6 +9,7 @@ import {
   Link
 } from "react-router-dom";
 import HomePage from './components/HomePage';
+import CreateUserForm from './adminka/CreateUserForm';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route path="/admin">
           <AdminPage />
+        </Route>
+        <Route path="/user">
+          <CreateUserForm />
         </Route>
       </Switch>
     </Router>

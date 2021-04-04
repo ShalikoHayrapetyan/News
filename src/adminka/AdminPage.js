@@ -8,10 +8,10 @@ import { auth } from '../App';
 
 
 function AdminPage() {
-  const localAdminEmail = useSelector(state => state.authReducer.adminEmail);
+  const localAdminRole = useSelector(state => state.authReducer.role);
   return (
     <div>
-      {localAdminEmail ? <Dashboard /> : <SignIn />}
+      {localAdminRole==="admin" ? <Dashboard /> : <SignIn />}
     </div>
   );
 

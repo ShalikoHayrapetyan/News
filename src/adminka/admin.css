@@ -2,7 +2,7 @@
     width: 100%;
     color: #fff;
     background-color: #1976d2;
-    padding: 30px 26px;
+    padding: 20px 26px;
     display: flex;
     justify-content: space-between;
 }
@@ -67,4 +67,11 @@ textarea {
 .makeStyles-root-7 {
     flex: 0 0 350px;
     margin: 0 20px 20px 0;
+}
+.homePage {
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.andromo.com/blog/wp-content/uploads/2020/12/news-1.jpg");
+    background-size: contain;
+    background-repeat:no-repeat
 }
