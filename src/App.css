@@ -32,10 +32,12 @@ html, body {
 /* Header */
 .headerNav__top{
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 20px 0;
 }
+
 
 .logo {
     font-size: 24px;
@@ -189,5 +191,13 @@ html, body {
   .article { 
     width: 100%;
     margin-right: 0;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .headerNav__user {
+    font-size: 14px;
   }
 }
