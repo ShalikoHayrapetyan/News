@@ -1,38 +1,193 @@
-.App {
-  text-align: center;
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  line-height: 1.4;
+}
+html, body {
+  width: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*{
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#root {
+  width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.headerNav {
+  width: 100%;
+}
+
+/* Header */
+.headerNav__top{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 20px 0;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.header__botom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+  padding: 5px 0;
+}
+
+.navBar {
+  display: flex;
+}
+
+.navBar a{
+  padding: 8px 0;
+  margin-right: 32px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+}
+
+.navBar a:hover {
+  text-decoration: underline;
+}
+
+.date {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+
+/* Footer */
+.footerBar {
+  background-color: #2E3339;
+  color: rgba(255, 255,255, 0.85);
+  padding: 40px 0;
+  margin-top: 60px;
+  font-weight: 400;
+  width: 100%;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-menu a{
+  padding: 8px 0;
+  margin-right: 32px;
+  font-size: 16px;  
+  text-decoration: none;
+  color: rgba(255, 255,255, 0.85);
+  font-weight: 400;
+}
+
+.footer-menu a:hover {
+  text-decoration: underline;
+}
+
+.copy {
+  font-size: 14px;
+}
+
+
+.site-content {
+  display: flex;
+  justify-content: space-between; 
+  margin-top: 50px;
+  width: 100%;
+}
+
+.main {
+  width: calc(100% - 220px);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.aside {
+  width: 220px;
+}
+
+.article {
+  margin-right: 20px;
+  margin-bottom: 30px;
+  width: 31%;
+}
+
+.article .MuiTypography-h5{
+  font-size: 20px;
+}
+
+@media (max-width: 1140px) {
+  .article { 
+    width: 30%;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 991px) {
+  .article { 
+    width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navBar {
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  .aside {
+    display: none;
+  }
+  .article { 
+    width: 48%;
+  }
+
+  .article:nth-child(even) {
+    margin-right: 0;
+  }
+
+  .date {
+    display: none;
+  }
+
+  .footerBar {
+    padding: 30px 0;
+  }
+  .footer-nav {
+    flex-wrap: wrap;
+  }
+  .footer-menu {
+    max-width: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    margin-bottom: 40px;
+  }
+
+}
+
+@media (max-width: 570px) { 
+  .article { 
+    width: 100%;
+    margin-right: 0;
   }
 }

@@ -1,0 +1,92 @@
+.header {
+    width: 100%;
+    color: #fff;
+    background-color: #1976d2;
+    padding: 10px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.logout {
+    cursor: pointer;
+}
+
+.wrapper {
+    display: flex;
+    min-height: calc(100vh - 90px);
+}
+
+.sidebar {
+    width: 250px;
+    flex: 0 0 250px;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    padding-top: 40px;
+}
+
+
+.navbar li {
+    font-size: 18px;
+    padding: 8px 26px;
+    list-style: none;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.navbar a {
+    color: rgba(0, 0, 0, 0.87);
+    text-decoration: none;
+}
+.navbar a:hover {
+    color: #1976d2;
+}
+
+.content {
+    flex: 0 0 80%;
+    padding: 48px 26px 50px;
+}
+
+.content .makeStyles-cardList-9 {
+    flex-wrap: wrap;
+}
+
+.add-news {
+    width: 100%;
+    max-width: 90%;
+}
+
+.h2 {
+    margin: 0 0 40px;
+}
+
+textarea {
+    resize: none;
+}
+
+.save-btn {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.makeStyles-root-7 {
+    flex: 0 0 260px;
+    margin: 0 15px 20px 0;
+}
+
+.content .MuiTypography-h5 {
+    font-size: 18px;
+}
+
+.homePage {
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.andromo.com/blog/wp-content/uploads/2020/12/news-1.jpg");
+    background-size: contain;
+    background-repeat:no-repeat
+}
