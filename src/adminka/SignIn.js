@@ -83,8 +83,8 @@ export default function SignIn() {
 
     const handleSignInAdmin = (e) => {
         e.preventDefault()
-        let role = ""
-        db.collection("users").where("userName", "==", login)
+        let role = "111"
+        db.collection("users").where("userName", "===", login)
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
@@ -102,9 +102,8 @@ export default function SignIn() {
                             });
                     } else alert("Sorry but yor aren't admin")
                 })
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
+            }).catch((error) => {
+                console.log("Error getting documents: ");
                 setError("Wrong email or password!!!")
             });
 
