@@ -2,8 +2,9 @@
     width: 100%;
     color: #fff;
     background-color: #1976d2;
-    padding: 20px 26px;
+    padding: 10px 26px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -33,16 +34,25 @@
     padding: 8px 26px;
     list-style: none;
     cursor: pointer;
-    transition: color .3s ease-in-out;
+    transition: color .2s ease-in-out;
+    color: rgba(0, 0, 0, 0.87);
 }
 
-.navbar li:hover {
+.navbar a {
+    color: rgba(0, 0, 0, 0.87);
+    text-decoration: none;
+}
+.navbar a:hover {
     color: #1976d2;
 }
 
 .content {
-    flex: 0 0 75%;
+    flex: 0 0 80%;
     padding: 48px 26px 50px;
+}
+
+.content .makeStyles-cardList-9 {
+    flex-wrap: wrap;
 }
 
 .add-news {
@@ -65,9 +75,14 @@ textarea {
 }
 
 .makeStyles-root-7 {
-    flex: 0 0 350px;
-    margin: 0 20px 20px 0;
+    flex: 0 0 260px;
+    margin: 0 15px 20px 0;
 }
+
+.content .MuiTypography-h5 {
+    font-size: 18px;
+}
+
 .homePage {
     width: 100%;
     height: 100%;

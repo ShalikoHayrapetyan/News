@@ -4,7 +4,7 @@ const Header = () => {
         <div className="headerNav">
             <div className="container">
                 <div className="headerNav__top">
-                    <h2 class="logo">Best news</h2>
+                    <h2 className="logo">Best news</h2>
                 </div>
             </div>
             <div className="container">
