@@ -13,11 +13,11 @@ import CreateUserForm from './adminka/CreateUserForm';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: "news-aca.firebaseapp.com",
-  projectId: "news-aca",
-  storageBucket: "news-aca.appspot.com",
-  messagingSenderId: "559724492296",
-  appId: "1:559724492296:web:1007aa320247ef66db83bd"
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 firebase.initializeApp(firebaseConfig);

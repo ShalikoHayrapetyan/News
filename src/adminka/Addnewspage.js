@@ -47,21 +47,20 @@ const Addnewspage = () => {
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
-    const [image, setImage] = useState(null);
+    const [images, setImages] = useState([]);
+    const [coverImage, setCoverImage] = useState("")
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
 
     useEffect(() => () => setIsUnmounted(true), [])
 
     useEffect(() => {
-
         db.collection("categories")
             .get()
             .then((querySnapshot) => {
                 if (isUnmounted) return;
                 const all = []
                 querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
                     all.push(doc.data())
                 });
                 setallCategoriesData(all)
@@ -81,15 +80,12 @@ const Addnewspage = () => {
         let shortDescError = shortDesc.length < 15;
         let descError = desc.length < 30;
         let error = titleError || categoryError || shortDescError || descError;
-
-
         if (error) {
             setErrors((oldState) => ({ ...oldState, titleError, categoryError, shortDescError, descError }))
         }
         else {
             setErrors(null);
         }
-
         return error;
     }
 
@@ -102,7 +98,8 @@ const Addnewspage = () => {
                 desc: desc,
                 id: uniqId,
                 like: 0,
-                image: image,
+                coverImage: coverImage,
+                images: images,
                 date: new Date().toDateString(),
                 category: category,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -118,23 +115,42 @@ const Addnewspage = () => {
             setTitle("")
             setShortDesc("")
             setDesc("")
-            setImage("")
             setCategory("")
+            setCoverImage("")
+            setImages([])
         }
 
     }
-    const imgHandleUpload = (e) => {
+
+    const imagesList = (imgs) => {
+        return imgs.map((itemSrc) => <img width="200" src={itemSrc} key={uuidv4()} />)
+    }
+    const chooseImages = (e) => {
+        [...e.target.files].map((el) => {
+            console.log(el)
+            let imgFormat = el.type.split("/").pop()
+            storage.ref()
+                .child(`images/${uuidv4()}.${imgFormat}`)
+                .put(el)
+                .then((snapshot) => {
+                    snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        setImages(prevState => ([...prevState, downloadURL]))
+                    });
+                });
+        })
+    }
+    const coverImgUpload = (e) => {
         const imgFormat = e.target.files[0].type.split("/").pop()
         storage.ref()
             .child(`images/${uuidv4()}.${imgFormat}`)
             .put(e.target.files[0])
             .then((snapshot) => {
                 snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    console.log(downloadURL)
-                    setImage(downloadURL)
+                    setCoverImage(downloadURL)
                 });
             });
     }
+
 
 
     return (
@@ -210,18 +226,34 @@ const Addnewspage = () => {
 
             <div className={classes.root}>
                 <input
-                    onChange={imgHandleUpload}
-                    accept="image/*"
-                    name={image}
+                    onChange={coverImgUpload}
+                    accept="coverImage/*"
+                    name={coverImage}
                     className={classes.input}
                     id="contained-button-file"
                     multiple
                     type="file"
                 />
                 <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="primary" component="span">Upload</Button> choose image
+                    <Button variant="contained" color="primary" component="span">Upload</Button>  Cover img
                 </label>
-                <img width="200" src={image} />
+                <img width="300" src={coverImage} />
+            </div>
+
+            <div className={classes.root}>
+                <input
+                    onChange={chooseImages}
+                    accept="images/*"
+                    name={images}
+                    className={classes.input}
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                />
+                <label htmlFor="contained-button-file">
+                    <Button variant="contained" color="primary" component="span">Upload</Button> images
+                </label>
+                {imagesList(images)}
             </div>
 
             <div className="save-btn">

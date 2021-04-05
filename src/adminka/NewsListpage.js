@@ -39,7 +39,7 @@ const NewsListpage = () => {
 
     useEffect(() => {
         db.collection("news")
-            //.orderBy("timestamp")
+            .orderBy("timestamp")
             //.limit(3)
             .get()
             .then((querySnapshot) => {
@@ -87,7 +87,7 @@ const NewsListpage = () => {
                                     component="img"
                                     alt={el.title}
                                     height="140"
-                                    image={el.image}
+                                    image={el.coverImage}
                                     title={el.title}
                                 />
                                 <CardContent>

@@ -96,6 +96,7 @@ class CreateUserForm extends Component {
       .catch((err) => {
         let errorCode = err.code;
         let errorMessage = err.message;
+        console.log(errorMessage)
       });
 
 
