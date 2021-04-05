@@ -68,9 +68,6 @@ const Addnewspage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-        return () => {
-            console.log('aborting...');
-        };
     }, [])
 
 
