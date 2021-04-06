@@ -10,6 +10,13 @@ import SaveIcon from '@material-ui/icons/Save';
 import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '../App'
 import { Redirect, useHistory } from 'react-router';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -119,9 +126,7 @@ const Addnewspage = () => {
 
     }
 
-    const imagesList = (imgs) => {
-        return imgs.map((itemSrc) => <img width="200" src={itemSrc} key={uuidv4()} />)
-    }
+
     const chooseImages = (e) => {
         [...e.target.files].map((el) => {
             console.log(el)
@@ -148,7 +153,36 @@ const Addnewspage = () => {
             });
     }
 
+    const removeImg = (index) => {
+        images.forEach((el, i) => {
+            if (index === i) {
+                images.splice(i, 1)
+                setImages([...images])
+            }
+        })
+    }
 
+    const imagesList = (imgs) => {
+        return imgs.map((itemSrc, i) => <span>
+            <IconButton onClick={() => removeImg(i)} aria-label="delete" className={classes.margin}>
+                <DeleteIcon />
+            </IconButton>
+            <img width="200" src={itemSrc} key={uuidv4()} />
+        </span>)
+    }
+
+    const coverImageContainer = (img) => {
+        if (coverImage.length > 1) {
+            return (
+                <span>
+                    <IconButton onClick={() => setCoverImage("")} aria-label="delete" className={classes.margin}>
+                        <DeleteIcon />
+                    </IconButton>
+                    <img width="300" src={coverImage} />
+                </span>)
+        }
+
+    }
 
     return (
         <div className="add-news">
@@ -224,23 +258,24 @@ const Addnewspage = () => {
             <div className={classes.root}>
                 <input
                     onChange={coverImgUpload}
-                    accept="coverImage/*"
+                    accept="image/*"
                     name={coverImage}
                     className={classes.input}
-                    id="contained-button-file"
-                    multiple
+                    id="coverImg"
                     type="file"
                 />
-                <label htmlFor="contained-button-file">
+                <label htmlFor="coverImg">
                     <Button variant="contained" color="primary" component="span">Upload</Button>  Cover img
                 </label>
-                <img width="300" src={coverImage} />
+                <div>{coverImageContainer(coverImage)}</div>
+
+
             </div>
 
             <div className={classes.root}>
                 <input
                     onChange={chooseImages}
-                    accept="images/*"
+                    accept="image/*"
                     name={images}
                     className={classes.input}
                     id="contained-button-file"
@@ -250,8 +285,10 @@ const Addnewspage = () => {
                 <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">Upload</Button> images
                 </label>
-                {imagesList(images)}
+                <div>{imagesList(images)}</div>
+
             </div>
+
 
             <div className="save-btn">
                 <Button
@@ -266,7 +303,6 @@ const Addnewspage = () => {
         </div>
     )
 }
-
 
 
 export default Addnewspage;

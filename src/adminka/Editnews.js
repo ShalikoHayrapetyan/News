@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '../App'
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +51,8 @@ const Editnews = () => {
     const [title, setTitle] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [desc, setDesc] = useState("");
-    const [image, setImage] = useState("");
+    const [images, setImages] = useState([]);
+    const [coverImage, setCoverImage] = useState("")
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
     let history = useHistory()
@@ -78,7 +82,8 @@ const Editnews = () => {
                     setShortDesc(doc.data().short_desc)
                     setDesc(doc.data().desc)
                     setCategory(doc.data().category)
-                    setImage(doc.data().image)
+                    setImages(doc.data().images)
+                    setCoverImage(doc.data().coverImage)
                     
                 });
 
@@ -97,7 +102,8 @@ const Editnews = () => {
             short_desc: shortDesc,
             desc,
             category,
-            image
+            coverImage,
+            images
         })
             .then(() => {
                 console.log("Document successfully updated!");
@@ -110,19 +116,65 @@ const Editnews = () => {
             });
 
     }
-    const imgHandleUpload = (e) => {
+    
+    const chooseImages = (e) => {
+        [...e.target.files].map((el) => {
+            console.log(el)
+            let imgFormat = el.type.split("/").pop()
+            storage.ref()
+                .child(`images/${uuidv4()}.${imgFormat}`)
+                .put(el)
+                .then((snapshot) => {
+                    snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        setImages(prevState => ([...prevState, downloadURL]))
+                    });
+                });
+        })
+    }
+    const coverImgUpload = (e) => {
         const imgFormat = e.target.files[0].type.split("/").pop()
         storage.ref()
             .child(`images/${uuidv4()}.${imgFormat}`)
             .put(e.target.files[0])
             .then((snapshot) => {
                 snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    console.log(downloadURL)
-                    setImage(downloadURL)
+                    setCoverImage(downloadURL)
                 });
             });
     }
-    
+
+    const removeImg = (index) => {
+        images.forEach((el, i) => {
+            if (index === i) {
+                images.splice(i, 1)
+                setImages([...images])
+            }
+        })
+    }
+
+    const imagesList = (imgs) => {
+        return imgs.map((itemSrc, i) => <span>
+            <IconButton onClick={() => removeImg(i)} aria-label="delete" className={classes.margin}>
+                <DeleteIcon />
+            </IconButton>
+            <img width="200" src={itemSrc} key={uuidv4()} />
+        </span>)
+    }
+
+    const coverImageContainer = (img) => {
+        if (coverImage.length > 1) {
+            return (
+                <span>
+                    <IconButton onClick={() => setCoverImage("")} aria-label="delete" className={classes.margin}>
+                        <DeleteIcon />
+                    </IconButton>
+                    <img width="300" src={coverImage} />
+                </span>)
+        }
+
+    }
+
+
     return (
 
         <div className="add-news">
@@ -192,23 +244,39 @@ const Editnews = () => {
                 }}
             />
 
+<div className={classes.root}>
+                <input
+                    onChange={coverImgUpload}
+                    accept="image/*"
+                    name={coverImage}
+                    className={classes.input}
+                    id="coverImg"
+                    type="file"
+                />
+                <label htmlFor="coverImg">
+                    <Button variant="contained" color="primary" component="span">Upload</Button>  Cover img
+                </label>
+                <div>{coverImageContainer(coverImage)}</div>
+
+
+            </div>
+
             <div className={classes.root}>
                 <input
-                    onChange={imgHandleUpload}
+                    onChange={chooseImages}
                     accept="image/*"
-                    name={image}
+                    name={images}
                     className={classes.input}
                     id="contained-button-file"
                     multiple
                     type="file"
                 />
                 <label htmlFor="contained-button-file">
-
-                    <Button variant="contained" color="primary" component="span">Upload</Button> choose image
+                    <Button variant="contained" color="primary" component="span">Upload</Button> images
                 </label>
-                <img width="300" src={image} />
-            </div>
+                <div>{imagesList(images)}</div>
 
+            </div>
             <div className="save-btn">
                 <Button
                     onClick={updateNews}
