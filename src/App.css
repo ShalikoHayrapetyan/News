@@ -134,6 +134,35 @@ html, body {
   font-size: 20px;
 }
 
+.flex-icon {
+  display: flex;
+  align-items: center;
+  color: #666;
+  line-height: 22px;
+  font-size: 15px;
+  margin-right: 35px;
+}
+
+.flex-icon svg{
+  margin-right: 5px;
+}
+
+.article-body {
+  padding-right: 40px;
+}
+.article-body__head {
+  display: flex;
+  align-items: center;
+}
+
+.article-body img {
+  max-width: 100%;
+}
+
+.article-body img + img {
+  margin-left: 15px;
+}
+
 @media (max-width: 1140px) {
   .article { 
     width: 30%;
