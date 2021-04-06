@@ -1,3 +1,11 @@
+import React from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom"
+
 
 const Footer = () => {
 
@@ -6,11 +14,11 @@ const Footer = () => {
             <div className="container">
                 <div className="footer-nav">
                     <nav className="footer-menu">
-                        <a href="#">News</a>
-                        <a href="#">Sport</a>
-                        <a href="#">Culture</a>
-                        <a href="#">Politics</a>
-                        <a href="#">Medicine</a>
+                        <Link to="/News">News</Link>
+                        <Link to="/Sport">Sport</Link>
+                        <Link to="/?category=Culture">Culture</Link>
+                        <Link to="/?category=Politics">Politics</Link>
+                        <Link to="/Medicine">Medicine</Link>
                     </nav>
 
                     <div className="copy">Copyright © 2021 BBC</div>

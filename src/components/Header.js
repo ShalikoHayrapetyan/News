@@ -1,4 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
@@ -12,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "10px",
     }
 }));
+
+
+    
 
 const Header = () => {
     const classes = useStyles();
@@ -36,21 +45,29 @@ const Header = () => {
                     </div>
                 </div>
             </div>
+           
+
+            
             <div className="container">
                 <div className="header__botom">
                     <nav className="navBar">
-                        <a href="#">News</a>
-                        <a href="#">Sport</a>
-                        <a href="#">Culture</a>
-                        <a href="#">Politics</a>
-                        <a href="#">Medicine</a>
-                    </nav>
+              
+                  
+
+                        <Link to="/News">News</Link>
+                        <Link to="/Sport">Sport</Link>
+                        <Link to="/?category=Culture">Culture</Link>
+                        <Link to="/?category=Politics">Politics</Link>
+                        <Link to="/Medicine">Medicine</Link> 
+                     </nav>
                     <div className="date">
                         {new Date().toDateString()}
                     </div>
                 </div>
             </div>
+           
         </div>
+        
     )
 }
 

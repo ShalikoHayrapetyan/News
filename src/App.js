@@ -29,13 +29,13 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <Route  path="/:category?">
           <HomePage />
         </Route>
-        <Route path="/admin">
+        <Route exact path="/admin">
           <AdminPage />
         </Route>
-        <Route path="/user">
+        <Route exact path="/user">
           <CreateUserForm />
         </Route>
       </Switch>
