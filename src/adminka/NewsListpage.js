@@ -1,6 +1,5 @@
 
 import { useEffect, useRef, useState } from 'react';
-import firebase from 'firebase';
 import { db } from '../App';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,11 +8,13 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Addnewspage from './Addnewspage';
 import { useDispatch } from 'react-redux';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useHistory } from 'react-router';
 import LinearIndeterminate from './Loading';
 
 const useStyles = makeStyles({
@@ -32,15 +33,31 @@ const NewsListpage = () => {
     let history = useHistory()
     const classes = useStyles();
     const dispatch = useDispatch();
-    let [allNewsData, setallNewsData] = useState(  <LinearIndeterminate />)
+    let [allNewsData, setallNewsData] = useState(<LinearIndeterminate />)
+    const [category, setCategory] = useState("")
+    const [allCategoriesData, setallCategoriesData] = useState([])
     let [isDeleting, setisDeleting] = useState(false)
     const [isUnmounted, setIsUnmounted] = useState(false);
     useEffect(() => () => setIsUnmounted(true), [])
 
     useEffect(() => {
+
+        db.collection("categories")
+            .get()
+            .then((querySnapshot) => {
+                if (isUnmounted) return;
+                const all = []
+                querySnapshot.forEach((doc) => {
+                    all.push(doc.data())
+                });
+                setallCategoriesData([...all])
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+
         db.collection("news")
             .orderBy("timestamp")
-            //.limit(3)
             .get()
             .then((querySnapshot) => {
                 if (isUnmounted) return
@@ -74,11 +91,35 @@ const NewsListpage = () => {
             }
         });
     }
-    
+
     return (
         <>
+            <h1 >{allNewsData.length} News in Page</h1>
+
+            <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
+                <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
+                <Select
+                    native
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    label="New categories"
+                    inputProps={{
+                        name: 'category',
+                        id: 'outlined-age-native-simple',
+                    }}
+                >
+                    <option aria-label="None" value="" />
+                    {
+                        allCategoriesData.map((cat) => <option key={cat.id} value={cat.title}>{cat.title}</option>)
+                    }
+                </Select>
+            </FormControl>
+
             <div className={classes.cardList}>
-                {Array.isArray(allNewsData) ? allNewsData.map((el) => {
+                {Array.isArray(allNewsData) ? allNewsData.filter(el => {
+                    if (category === "") return true
+                    return el.category == category
+                }).map((el) => {
                     return (
 
                         <Card className={classes.root} key={el.id}>

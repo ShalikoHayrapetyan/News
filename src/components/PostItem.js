@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import CommentIcon from '@material-ui/icons/Comment';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,15 +19,11 @@ const useStyles = makeStyles((theme) => ({
         height: 0,
         paddingTop: '56.25%', // 16:9
     },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
+    icons: {
+        fontSize: '16px',
     },
-    expandOpen: {
-        transform: 'rotate(180deg)',
+    iconSVg: {
+        marginRight: '8px',
     }
 }));
 
@@ -51,12 +48,12 @@ const PostItem = () => {
                         guests. Add 1 cup of frozen peas along with the mussels, if you like.
                     </Typography>
                 </CardContent>
-                <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
+                <CardActions disableSpacing >
+                    <IconButton aria-label="add to favorites" className={classes.icons}>
+                        <FavoriteIcon className={classes.iconSVg} />15
                     </IconButton>
-                    <IconButton aria-label="share">
-                        <ShareIcon />
+                    <IconButton aria-label="comments" className={classes.icons}>
+                        <CommentIcon className={classes.iconSVg} />7
                     </IconButton>
                 </CardActions>
             </Card>
