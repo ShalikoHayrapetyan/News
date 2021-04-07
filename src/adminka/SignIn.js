@@ -60,30 +60,13 @@ export default function SignIn() {
     const dispatch = useDispatch();
 
 
-    useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                db.collection("users").where("userName", "==", user.email)
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            dispatch({
-                                type: 'signIn',
-                                payload: {
-                                    adminEmail: user.email,
-                                    role: doc.data().role
-                                }
-                            });
-
-                        })
-                    })
-                }
-        });
-    }, []);
-
     const handleSignInAdmin = (e) => {
+        dispatch({
+            type: 'isAuthenticating',
+            payload:true 
+        });
         e.preventDefault()
-        let role = "111"
+        let role = ""
         db.collection("users").where("userName", "==", login)
             .get()
             .then((querySnapshot) => {

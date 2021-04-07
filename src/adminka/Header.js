@@ -5,6 +5,10 @@ const Header = () => {
     const localAdminEmail = useSelector(state => state.authReducer.adminEmail);
     const dispatch = useDispatch();
     const handleLogout = () => {
+        dispatch({
+            type: 'isAuthenticating',
+            payload:true 
+        });
         auth.signOut()
         dispatch({
             type: 'signOut',

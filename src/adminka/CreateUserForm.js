@@ -16,6 +16,7 @@ import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import VisibilityOffTwoToneIcon from "@material-ui/icons/VisibilityOffTwoTone";
 import CloseIcon from "@material-ui/icons/Close";
 import { auth, db } from "../App";
+import { connect } from "react-redux";
 
 class CreateUserForm extends Component {
 
@@ -66,6 +67,7 @@ class CreateUserForm extends Component {
         errorOpen: true,
         error: "Wrong Email addres"
       });
+      return
     }
 
     if (!this.passwordMatch()) {
@@ -73,7 +75,13 @@ class CreateUserForm extends Component {
         errorOpen: true,
         error: "Passwords don't match"
       });
+      return
     }
+    this.props.dispatch({
+      type: 'isAuthenticating',
+      payload:true 
+  });
+
     const newUserCredentials = {
       email: this.state.email,
       password: this.state.password,
@@ -249,4 +257,4 @@ class CreateUserForm extends Component {
   }
 }
 
-export default withStyles(register)(CreateUserForm);
+export default connect()(withStyles(register)(CreateUserForm));

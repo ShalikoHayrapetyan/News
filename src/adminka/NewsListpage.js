@@ -33,7 +33,8 @@ const NewsListpage = () => {
     let history = useHistory()
     const classes = useStyles();
     const dispatch = useDispatch();
-    let [allNewsData, setallNewsData] = useState(<LinearIndeterminate />)
+    const [allNewsData, setallNewsData] = useState([])
+    const [isLoding, setIsLoding] = useState(false)
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
     let [isDeleting, setisDeleting] = useState(false)
@@ -55,7 +56,7 @@ const NewsListpage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-
+            setIsLoding(true)
         db.collection("news")
             .orderBy("timestamp")
             .get()
@@ -70,7 +71,7 @@ const NewsListpage = () => {
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-            });
+            }).finally(()=>setIsLoding(false) );
 
     }, [isDeleting,])
 
@@ -116,7 +117,7 @@ const NewsListpage = () => {
             </FormControl>
 
             <div className={classes.cardList}>
-                {Array.isArray(allNewsData) ? allNewsData.filter(el => {
+                {!isLoding ? allNewsData.filter(el => {
                     if (category === "") return true
                     return el.category == category
                 }).map((el) => {
@@ -153,7 +154,7 @@ const NewsListpage = () => {
                     )
 
                 })
-                    : allNewsData}
+                    : <LinearIndeterminate />}
             </div>
         </>
     )

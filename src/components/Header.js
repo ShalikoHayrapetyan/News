@@ -1,6 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useParams,
+    useRouteMatch
+} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +47,7 @@ const Header = () => {
             <div className="container">
                 <div className="header__botom">
                     <nav className="navBar">
-                        <a href="#">News</a>
+                    <Link to="/news" >News</Link>
                         <a href="#">Sport</a>
                         <a href="#">Culture</a>
                         <a href="#">Politics</a>
