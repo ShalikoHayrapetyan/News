@@ -57,9 +57,9 @@ function App() {
 
   return (
     <>
-    {isAuthenticating ? (
+    {/* {isAuthenticating ? (
       <LinearIndeterminate />
-    ) : (
+    ) : ( */}
       <Router>
       <Switch>
         <Route exact path="/">

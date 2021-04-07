@@ -46,12 +46,14 @@ const Categorypage = () => {
     let [isDeleting, setisDeleting] = useState(false)
 
     let [editedName, setEditedName] = useState("")
-    let [allCategoriesData, setallCategoriesData] = useState(<LinearIndeterminate />)
+    let [allCategoriesData, setallCategoriesData] = useState([])
+    const [isLoding, setIsLoding] = useState(false)
     let categoryState = useSelector((state) => state.pages.categoryState)
     
     useEffect(() => () => setIsUnmounted(true), [])
 
     useEffect(() => {
+        setIsLoding(true)
         db.collection("categories")
             .get()
             .then((querySnapshot) => {
@@ -65,7 +67,7 @@ const Categorypage = () => {
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-            })
+            }).finally(()=>setIsLoding(false) );
 
         return () => {
             console.log('aborting...');
@@ -116,7 +118,7 @@ const Categorypage = () => {
                     <div className={classes.demo}>
                         <List dense={dense}>
 
-                            {  Array.isArray(allCategoriesData) ? allCategoriesData.map((el) => {
+                            {!isLoding ? allCategoriesData.map((el) => {
                                 return (
 
                                     <ListItem key={el.title}>
@@ -154,7 +156,7 @@ const Categorypage = () => {
                                     </ListItem>
 
                                 )
-                            }): allCategoriesData
+                            }): <LinearIndeterminate />
                             }
                         </List>
                     </div>

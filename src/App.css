@@ -121,7 +121,7 @@ html, body {
 }
 
 .aside {
-  width: 220px;
+  width: 280px;
 }
 
 .article {
@@ -229,4 +229,14 @@ html, body {
   .headerNav__user {
     font-size: 14px;
   }
+}
+
+.asideTexts{
+  word-wrap: break-word;
+  margin-bottom: 10px;
+}
+.category-title{
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: blue;
 }

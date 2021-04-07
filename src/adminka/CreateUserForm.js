@@ -20,9 +20,6 @@ import { connect } from "react-redux";
 
 class CreateUserForm extends Component {
 
-
-
-  
   state = {
     email: "",
     password: "",
@@ -113,7 +110,7 @@ class CreateUserForm extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.main}>
+      <div className={classes.main} >
         <CssBaseline />
 
         <Paper className={classes.paper}>
