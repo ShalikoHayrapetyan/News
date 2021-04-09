@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    BrowserRouter as Router,
     Link,
     useRouteMatch
 } from "react-router-dom";

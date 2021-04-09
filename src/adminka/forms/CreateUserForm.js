@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { register } from "./RegistrationStyles";
+import { register } from "./../RegistrationStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
-import Avatar from "@material-ui/core/Avatar";
 import { FormControl, Input, InputLabel, Button } from "@material-ui/core";
-import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import IconButton from "@material-ui/core/IconButton";
@@ -15,7 +12,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import VisibilityOffTwoToneIcon from "@material-ui/icons/VisibilityOffTwoTone";
 import CloseIcon from "@material-ui/icons/Close";
-import { auth, db } from "../App";
+import { auth, db } from "../../App";
 import { connect } from "react-redux";
 
 class CreateUserForm extends Component {
@@ -42,9 +39,9 @@ class CreateUserForm extends Component {
   };
 
   passwordMatch = () => this.state.password === this.state.passwordConfrim;
-  validateEmail= (email) =>{
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
+  validateEmail = (email) => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   }
 
   showPassword = () => {
@@ -110,7 +107,8 @@ class CreateUserForm extends Component {
         <CssBaseline />
 
         <Paper className={classes.paper}>
-        <div className='closeBtn' onClick={()=>this.props.setisSignUp(false)} >X</div>
+          <div className='closeBtn' onClick={() => this.props.setisSignUp(false)} >X</div>
+          <h2>Sign Up</h2>
           <form
             className={classes.form}
             onSubmit={() => this.submitRegistration}

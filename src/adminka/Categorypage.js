@@ -1,6 +1,4 @@
-
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -49,7 +47,7 @@ const Categorypage = () => {
     let [allCategoriesData, setallCategoriesData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     let categoryState = useSelector((state) => state.pages.categoryState)
-    
+
     useEffect(() => () => setIsUnmounted(true), [])
 
     useEffect(() => {
@@ -67,7 +65,7 @@ const Categorypage = () => {
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-            }).finally(()=>setIsLoding(false) );
+            }).finally(() => setIsLoding(false));
 
         return () => {
             console.log('aborting...');
@@ -156,7 +154,7 @@ const Categorypage = () => {
                                     </ListItem>
 
                                 )
-                            }): <LinearIndeterminate />
+                            }) : <LinearIndeterminate />
                             }
                         </List>
                     </div>

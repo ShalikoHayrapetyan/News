@@ -6,11 +6,8 @@ import NewsListpage from './NewsListpage';
 import Categorypage from './Categorypage';
 import Editnews from './Editnews';
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
-    Link,
-    useParams,
     useRouteMatch,
     Redirect,
 
@@ -27,7 +24,7 @@ const Dashboard = () => {
                 <div className="content">
                     <Switch>
                         <Route exact path={path}>
-                         <AdminHomePage />
+                            <AdminHomePage />
                         </Route>
                         <Route path={`${path}/addNews`}>
                             <Addnewspage />
@@ -36,12 +33,12 @@ const Dashboard = () => {
                             <NewsListpage />
                         </Route>
                         <Route path={`${path}/editNews`}>
-                           <Editnews />
+                            <Editnews />
                         </Route>
                         <Route path={`${path}/newsCategories`}>
                             <Categorypage />
                         </Route>
-                        <Redirect to="/admin"/>
+                        <Redirect to="/admin" />
                     </Switch>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,12 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch } from 'react-redux';
-import { auth, db } from "../App"
-import LinearIndeterminate from './Loading';
+import { auth, db } from "../../App"
+import LinearIndeterminate from './../Loading';
 import { Redirect } from 'react-router';
 import {
-    BrowserRouter as Router,
     Switch,
 } from "react-router-dom";
 
@@ -52,17 +50,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SignIn() {
+export default function AdminSignIn() {
+    const classes = useStyles();
 
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setisLoading] = useState(false);
-
-
-    const classes = useStyles();
-    //const { email: adminEmail, password: adminPassword } = useSelector(state => state.authReducer.admin)
-    const dispatch = useDispatch();
 
 
     const handleSignInAdmin = (e) => {
