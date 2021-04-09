@@ -3,15 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {
     BrowserRouter as Router,
-    Switch,
-    Route,
     Link,
-    useParams,
-    useRouteMatch
 } from "react-router-dom";
 import CreateUserForm from '../adminka/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth, db } from '../App';
+import UserSignInForm from '../adminka/UserSignInForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,45 +18,25 @@ const useStyles = makeStyles((theme) => ({
     },
     logout: {
         marginLeft: "10px",
-    }
+    },
+    btns: {
+        marginRight: "8px",
+    },
+
 }));
 
 const Header = () => {
+    const dispatch = useDispatch();
     const classes = useStyles();
-    const [isSignIn, setisSignIn]=useState(false)
+    const [isSignIn, setisSignIn] = useState(false)
+    const [isSignUp, setisSignUp] = useState(false)
     const localUserEmail = useSelector(state => state.authReducer.adminEmail);
     const categoriesData = useSelector(state => state.fireBaseData.categoryData);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        db.collection("categories")
-            .get()
-            .then((querySnapshot) => {
-                const all = []
-                querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
-                    all.push(doc.data())
-                });
-                dispatch({
-                    type: 'setCatgeoryData',
-                    payload: {
-                        data:all
-                    }
-                });
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            })
-    }, [])
-
-    console.log(categoriesData)
-
 
     const handleLogout = () => {
         dispatch({
             type: 'isAuthenticating',
-            payload:true 
+            payload: true
         });
         auth.signOut()
         dispatch({
@@ -75,16 +52,23 @@ const Header = () => {
                     <h2 className="logo">Best news</h2>
 
                     <div className="headerNav__user">
-                        { localUserEmail ? <div>
-                           { localUserEmail}
-                            <Button size="small" variant="outlined" color="secondary" onClick={handleLogout} className={classes.logout}>
-                                Sign out
+                        {localUserEmail ?
+                            <div>
+                                {localUserEmail}
+                                <Button size="small" variant="outlined" color="secondary" onClick={handleLogout} className={classes.logout}>
+                                    Sign out
                             </Button>
-                        </div> : isSignIn ? <CreateUserForm /> : (
-                              <Button variant="outlined" color="primary" onClick={()=>setisSignIn(true)}>
-                            Sign In/Up
-                        </Button>
-                        )
+                            </div> : isSignIn ?
+                                <UserSignInForm setisSignIn={setisSignIn} />
+                                : isSignUp ? <CreateUserForm setisSignUp={setisSignUp} />
+                                    : (<>
+                                        <Button className={classes.btns} variant="outlined" color="primary" onClick={() => setisSignIn(true)}>
+                                            Sign In
+                                                    </Button>
+                                        <Button className={classes.btns} variant="outlined" color="primary" onClick={() => setisSignUp(true)}>
+                                            Sign Up
+                                                   </Button>
+                                    </>)
                         }
                     </div>
                 </div>
@@ -92,8 +76,8 @@ const Header = () => {
             <div className="container">
                 <div className="header__botom">
                     <nav className="navBar">
-                    <Link to="/news" >News</Link>
-                    {categoriesData && categoriesData.map(el => <Link key={el.id}  to={`/${el.title}` }>{el.title}</Link>) }
+                        <Link to="/News" >All News</Link>
+                        {categoriesData.map(el => <Link key={el.id} to={`/${el.title}`}>{el.title}</Link>)}
                     </nav>
                     <div className="date">
                         {new Date().toDateString()}

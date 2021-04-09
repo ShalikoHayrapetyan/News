@@ -240,3 +240,7 @@ html, body {
   margin-bottom: 10px;
   color: blue;
 }
+.closeBtn{
+ font-size: 25px;
+ cursor: pointer;
+}

@@ -6,15 +6,15 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
 import HomePage from './components/HomePage';
 import CreateUserForm from './adminka/CreateUserForm';
 import NewsPage from './components/NewsPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { LocalDining } from '@material-ui/icons';
 import LinearIndeterminate from './adminka/Loading';
+import AllNewsInCategory from './components/AllNewsInCategory';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -32,54 +32,119 @@ export const storage = firebase.storage()
 
 function App() {
   const dispatch = useDispatch();
-  const isAuthenticating =useSelector(state => state.authReducer.isAuthenticating)
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            db.collection("users").where("userName", "==", user.email)
-                .get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        dispatch({
-                            type: 'signIn',
-                            payload: {
+  const isAuthenticating = useSelector(state => state.authReducer.isAuthenticating)
+  const categoriesData = useSelector(state => state.fireBaseData.categoryData);
+  const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
 
-                                adminEmail: user.email,
-                                role: doc.data().role
-                            }
-                        });
-
-                    })
-                })
+  function getAllNewsData(){
+        db.collection("news")
+    .orderBy("timestamp")
+    .get()
+    .then((querySnapshot) => {
+      const all = []
+      querySnapshot.forEach((doc) => {
+        all.push(doc.data())
+      });
+      dispatch({
+        type: 'getNewsData',
+        payload: {
+          data: all.reverse()
+        }
+      });
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    })
+}
+  function getAllCategoryData(){
+    db.collection("categories")
+    .get()
+    .then((querySnapshot) => {
+        const all = []
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            all.push(doc.data())
+        });
+        dispatch({
+            type: 'setCatgeoryData',
+            payload: {
+                data: all
             }
+        });
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    })
+  }
+
+ 
+
+  let categoryPath=[]
+ if(categoriesData) categoryPath=categoriesData.map(category => "/" + category.title)
+
+  useEffect(() => {
+    getAllNewsData()
+    getAllCategoryData()
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch({
+          type: 'isAuthenticating',
+          payload: true
+        });
+        db.collection("users").where("userName", "==", user.email)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              dispatch({
+                type: 'signIn',
+                payload: {
+                  adminEmail: user.email,
+                  role: doc.data().role
+                }
+              });
+
+            })
+          }).finally(()=>{
+            dispatch({
+              type: 'isAuthenticating',
+              payload: false
+            });
+
+            
+          })
+      }
     });
-}, []);
+  }, []);
 
   return (
     <>
-    {/* {isAuthenticating ? (
+     {isAuthenticating ? (
       <LinearIndeterminate />
-    ) : ( */}
+    ) : categoriesData  && allNewsData ?  (
       <Router>
-      <Switch>
-        <Route exact path="/">
-          <HomePage />
-        </Route>
-        <Route path="/admin">
-          <AdminPage />
-        </Route>
-        <Route path="/user">
-          <CreateUserForm />
-        </Route>
-        <Route path="/news">
-          <NewsPage />
-        </Route>
-      </Switch>
-    </Router>
-    )}
+        <Switch>
+          <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route path="/admin">
+            <AdminPage />
+          </Route>
+          <Route path="/user">
+            <CreateUserForm />
+          </Route>
+          <Route path="/News">
+            <AllNewsInCategory />
+          </Route>
+          <Route path={categoryPath}>
+            <AllNewsInCategory />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      </Router>
+       ) : <LinearIndeterminate />}
     </>
-  
 
+   
   );
 }
 

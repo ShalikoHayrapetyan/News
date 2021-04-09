@@ -5,60 +5,37 @@ import PostItem from './PostItem';
 import Footer from "./Footer";
 import { db } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
+import LinearIndeterminate from '../adminka/Loading';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
   const categoriesData = useSelector(state => state.fireBaseData.categoryData);
 
-  useEffect(()=>{
-    db.collection("news")
-    .orderBy("timestamp")
-    .get()
-    .then((querySnapshot) => {
-        const all = []
-        querySnapshot.forEach((doc) => {
-            all.push(doc.data())
-        });
-        dispatch({
-          type: 'getNewsData',
-          payload: {
-              data:all.reverse()
-          }
-      });
-    })
-    .catch((error) => {
-        console.log("Error getting documents: ", error);
-    })
-  }, [])
-  
- 
+  const filteredNews=(title)=>{
+    const news=allNewsData.filter(el => el.category===title).slice(0,3)
+    return news
+  }
+
 
   return (
     <>
       <Header />
-
       <div className="container ">
-        
-
-        {categoriesData && categoriesData.map(el=> <div>
+    {  categoriesData.map(cat => <div  key={cat.title}> 
           <div className="site-content">
-              <div key={el.title}>
-                  <div className="category-title">{el.title}</div>
-          <div className="main">
-            <PostItem />
-            <PostItem />
-            <PostItem />
+            <div>
+              <div className="category-title">{cat.title}</div>
+              <div className="main">
+              { filteredNews(cat.title).map(news =>  <PostItem key={news.id} news={news} />)}
+              </div>
+            </div>
           </div>
-                </div>
-                </div>
-            </div>)}
-         
-
-          <Aside />
-        
-      </div>
-
+        </div>
+        )}
+        <Aside />
+      </div> 
+      
       <Footer />
     </>
   );

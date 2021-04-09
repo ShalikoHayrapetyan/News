@@ -41,7 +41,6 @@ class CreateUserForm extends Component {
     });
   };
 
-  passwordMatch = () => this.state.password === this.state.passwordConfrim;
   validateEmail= (email) =>{
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
@@ -67,39 +66,17 @@ class CreateUserForm extends Component {
       return
     }
 
-    if (!this.passwordMatch()) {
-      this.setState({
-        errorOpen: true,
-        error: "Passwords don't match"
-      });
-      return
-    }
-    const newUserCredentials = {
-      email: this.state.email,
-      password: this.state.password,
-      passwordConfrim: this.state.passwordConfrim
-    };
+  auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+  .then((userCredential) => {
+      const user = userCredential.user;
 
-    auth.createUserWithEmailAndPassword(newUserCredentials.email, newUserCredentials.password)
-      .then((userCredential) => {
-        db.collection("users").doc(userCredential.user.uid).set({
-          userName: newUserCredentials.email,
-          role: "user",
-        }).then(() => {
-          console.log("Document successfully written!");
-          this.props.setisSignUp(false)
-        })
-          .catch((error) => {
-            console.error("Error writing document: ", error);
-          });
-        const user = userCredential.user;
-      })
-      .catch((err) => {
-        let errorCode = err.code;
-        let errorMessage = err.message;
-        console.log(errorMessage)
-      });
-
+  })
+  .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode, errorMessage)
+      //setError("Wrong email or password!!!")
+  });
 
   };
 
@@ -107,10 +84,11 @@ class CreateUserForm extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.main} >
+        
         <CssBaseline />
 
         <Paper className={classes.paper}>
-        <div className='closeBtn' onClick={()=>this.props.setisSignUp(false)} >X</div>
+        <div className='closeBtn' onClick={()=>this.props.setisSignIn(false)} >X</div>
           <form
             className={classes.form}
             onSubmit={() => this.submitRegistration}
@@ -162,39 +140,6 @@ class CreateUserForm extends Component {
               />
             </FormControl>
 
-            <FormControl required fullWidth margin="normal">
-              <InputLabel htmlFor="passwordConfrim" className={classes.labels}>
-                confrim password
-              </InputLabel>
-              <Input
-                name="passwordConfrim"
-                autoComplete="passwordConfrim"
-                className={classes.inputs}
-                disableUnderline={true}
-                onClick={this.state.showPassword}
-                onChange={this.handleChange("passwordConfrim")}
-                type={this.state.hidePassword ? "password" : "input"}
-                endAdornment={
-                  this.state.hidePassword ? (
-                    <InputAdornment position="end">
-                      <VisibilityOffTwoToneIcon
-                        fontSize="default"
-                        className={classes.passwordEye}
-                        onClick={this.showPassword}
-                      />
-                    </InputAdornment>
-                  ) : (
-                    <InputAdornment position="end">
-                      <VisibilityTwoToneIcon
-                        fontSize="default"
-                        className={classes.passwordEye}
-                        onClick={this.showPassword}
-                      />
-                    </InputAdornment>
-                  )
-                }
-              />
-            </FormControl>
             <Button
               disabled={!this.isValid()}
               disableRipple
@@ -204,7 +149,7 @@ class CreateUserForm extends Component {
               type="submit"
               onClick={this.submitRegistration}
             >
-              Sign Up
+              Sign in
             </Button>
           </form>
 
