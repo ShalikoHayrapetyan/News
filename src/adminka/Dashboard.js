@@ -5,7 +5,6 @@ import Addnewspage from './Addnewspage';
 import NewsListpage from './NewsListpage';
 import Categorypage from './Categorypage';
 import Editnews from './Editnews';
-import AddCategoryForm from './AddCategoryForm';
 import {
     BrowserRouter as Router,
     Switch,
@@ -13,6 +12,7 @@ import {
     Link,
     useParams,
     useRouteMatch,
+    Redirect,
 
 } from "react-router-dom";
 import AdminHomePage from './AdminHomePage';
@@ -41,6 +41,7 @@ const Dashboard = () => {
                         <Route path={`${path}/newsCategories`}>
                             <Categorypage />
                         </Route>
+                        <Redirect to="/admin"/>
                     </Switch>
                 </div>
             </div>

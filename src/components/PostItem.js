@@ -26,30 +26,31 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const PostItem = () => {
+const PostItem = (props) => {
+   const {title, short_desc, coverImage, like, date, }=props.news
+   console.log(props)
     const classes = useStyles();
 
     return (
         <div className="article">
             <Card className={classes.root}>
                 <CardHeader
-                    title="Shrimp and Chorizo Paella"
-                    subheader="September 14, 2016"
+                    title={title}
+                    subheader={date}
                 />
                 <CardMedia
                     className={classes.media}
-                    image="https://material-ui.com/static/images/cards/paella.jpg"
-                    title="Paella dish"
+                    image={coverImage}
+                    title={title}
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        This impressive paella is a perfect party dish and a fun meal to cook together with your
-                        guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                        {short_desc}
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing >
                     <IconButton aria-label="add to favorites" className={classes.icons}>
-                        <FavoriteIcon className={classes.iconSVg} />15
+                        <FavoriteIcon className={classes.iconSVg} />{like}
                     </IconButton>
                     <IconButton aria-label="comments" className={classes.icons}>
                         <CommentIcon className={classes.iconSVg} />7

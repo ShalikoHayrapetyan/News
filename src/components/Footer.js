@@ -1,19 +1,21 @@
+import {
+    BrowserRouter as Router,
+    Link,
+} from "react-router-dom";import { useSelector } from "react-redux";
 
 const Footer = () => {
+    const categoriesData = useSelector(state => state.fireBaseData.categoryData);
+
 
     return (
         <div className="footerBar">
             <div className="container">
                 <div className="footer-nav">
                     <nav className="footer-menu">
-                        <a href="#">News</a>
-                        <a href="#">Sport</a>
-                        <a href="#">Culture</a>
-                        <a href="#">Politics</a>
-                        <a href="#">Medicine</a>
+                    {categoriesData && categoriesData.map(el => <Link key={el.id} to={`/${el.title}`}>{el.title}</Link>)}
                     </nav>
 
-                    <div className="copy">Copyright © 2021 BBC</div>
+                    <div className="copy">Copyright © 2021 ACA</div>
                 </div>
             </div>
         </div>

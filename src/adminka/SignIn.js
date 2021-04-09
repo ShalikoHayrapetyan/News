@@ -12,6 +12,11 @@ import Container from '@material-ui/core/Container';
 import { useDispatch } from 'react-redux';
 import { auth, db } from "../App"
 import LinearIndeterminate from './Loading';
+import { Redirect } from 'react-router';
+import {
+    BrowserRouter as Router,
+    Switch,
+} from "react-router-dom";
 
 function Copyright() {
     return (
@@ -48,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignIn() {
-    
+
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -61,16 +66,14 @@ export default function SignIn() {
 
 
     const handleSignInAdmin = (e) => {
-        dispatch({
-            type: 'isAuthenticating',
-            payload:true 
-        });
         e.preventDefault()
         let role = ""
         db.collection("users").where("userName", "==", login)
             .get()
             .then((querySnapshot) => {
+                if (querySnapshot.docs.length === 0) throw ""
                 querySnapshot.forEach((doc) => {
+
                     role = doc.data().role
                     if (role == "admin") {
                         auth.signInWithEmailAndPassword(login, password)
@@ -151,6 +154,11 @@ export default function SignIn() {
             <Box mt={8}>
                 <Copyright />
             </Box>
+
+            <Switch>
+                <Redirect to="/admin" />
+            </Switch>
+
         </Container>
     );
 }
