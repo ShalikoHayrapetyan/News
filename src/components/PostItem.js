@@ -23,13 +23,30 @@ const useStyles = makeStyles((theme) => ({
     },
     iconSVg: {
         marginRight: '8px',
+    },
+    shortTitle: {
+        maxHeight: "52px",
+        overflow: "hidden",
+        display: "-webkit-box",
+        "-webkit-line-clamp": 2,
+        "-webkit-box-orient": "vertical",
+    },
+    short: {
+        maxHeight: "40px",
+        overflow: "hidden",
+        display: "-webkit-box",
+        "-webkit-line-clamp": 2,
+        "-webkit-box-orient": "vertical",
     }
+
 }));
 
 const PostItem = (props) => {
-   const {title, short_desc, coverImage, like, date, }=props.news
-   console.log(props)
+    let { title, short_desc, coverImage, like, date, id } = props.news
     const classes = useStyles();
+
+    if (coverImage.length === 0) { coverImage = "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg" }
+
 
     return (
         <div className="article">
@@ -41,10 +58,10 @@ const PostItem = (props) => {
                 <CardMedia
                     className={classes.media}
                     image={coverImage}
-                    title={title}
+                    title={id}
                 />
                 <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography variant="body2" color="textSecondary" component="p" className={classes.short}>
                         {short_desc}
                     </Typography>
                 </CardContent>
@@ -57,7 +74,7 @@ const PostItem = (props) => {
                     </IconButton>
                 </CardActions>
             </Card>
-        </div>
+        </div >
     )
 
 }

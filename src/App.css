@@ -5,6 +5,7 @@ body {
   color: rgba(0, 0, 0, 0.87);
   font-weight: 400;
   line-height: 1.4;
+  background-color: rgb(245, 242, 242);
 }
 html, body {
   width: 100%;
@@ -35,15 +36,17 @@ html, body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
+.headerNav__top > a[href='/'] {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.87);
+}
 
 .logo {
-    font-size: 24px;
-    font-weight: 400;
     margin: 0;
-    text-transform: uppercase;
+    width: 170px;
 }
 
 .header__botom {
@@ -63,6 +66,7 @@ html, body {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.87);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .navBar a:hover {
@@ -110,7 +114,8 @@ html, body {
 .site-content {
   display: flex;
   justify-content: space-between; 
-  margin-top: 50px;
+  align-items: flex-start;
+  margin-top: 40px;
   width: 100%;
 }
 
@@ -118,16 +123,52 @@ html, body {
   width: calc(100% - 220px);
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.main-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.main_categories {
+  width: 100%;
+}
+
+.main_categories .article {
+  width: 23%;
 }
 
 .aside {
   width: 280px;
 }
 
+.aside > div{
+  border-bottom:1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.aside__banner {
+  max-width: 100%;
+}
+.aside__banner img {
+  max-width: 100%;
+}
+
 .article {
   margin-right: 20px;
   margin-bottom: 30px;
-  width: 31%;
+  width: 30%;
+}
+.article .MuiCardHeader-title{
+  max-height: 52px;
+  overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .article .MuiTypography-h5{
@@ -189,7 +230,8 @@ html, body {
   .aside {
     display: none;
   }
-  .article { 
+  .article,
+  .main_categories .article { 
     width: 48%;
   }
 
@@ -217,14 +259,16 @@ html, body {
 }
 
 @media (max-width: 570px) { 
-  .article { 
+  .article,
+  .main_categories .article { 
     width: 100%;
     margin-right: 0;
+    margin-bottom: 12px;
   }
 
   .logo {
-    font-size: 20px;
-  }
+    width: 110px;
+}
 
   .headerNav__user {
     font-size: 14px;
@@ -238,9 +282,12 @@ html, body {
 .category-title{
   font-size: 30px;
   margin-bottom: 10px;
-  color: blue;
+  color:#3f51b5;
+  width: 100%;
 }
 .closeBtn{
- font-size: 25px;
+ font-size: 22px;
  cursor: pointer;
+ align-self: flex-end;
+ margin-right: 15px;
 }

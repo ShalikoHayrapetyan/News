@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '../App';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,13 +19,27 @@ import LinearIndeterminate from './Loading';
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 345,
+        //maxWidth: 345,
+        flex: "0 0 230px",
+        margin: "0 14px 20px 0",
+        position: 'relative',
+        paddingBottom: '50px',
     },
     btnDiv: {
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        position: 'absolute',
+        bottom: '0',
+        width: "100%",
+
     },
     cardList: {
-        display: "flex"
+        display: "flex",
+        flexWrap: "wrap",
+    },
+    title_h1: {
+        fontSize: "24px",
+        color: "#999",
+        marginTop: '0',
     }
 });
 
@@ -56,7 +70,7 @@ const NewsListpage = () => {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-            setIsLoding(true)
+        setIsLoding(true)
         db.collection("news")
             .orderBy("timestamp")
             .get()
@@ -71,7 +85,7 @@ const NewsListpage = () => {
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-            }).finally(()=>setIsLoding(false) );
+            }).finally(() => setIsLoding(false));
 
     }, [isDeleting,])
 
@@ -95,10 +109,10 @@ const NewsListpage = () => {
 
     return (
         <>
-            <h1 >{allNewsData.length} News in Page</h1>
+            <h1 className={classes.title_h1}>{allNewsData.length} - news in page</h1>
 
-            <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
-                <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
+            <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: "0px 0px 20px 0px" }}>
+                <InputLabel htmlFor="outlined-age-native-simple">News categories</InputLabel>
                 <Select
                     native
                     value={category}
@@ -130,15 +144,15 @@ const NewsListpage = () => {
                                     alt={el.title}
                                     height="140"
                                     image={el.coverImage}
-                                    title={el.title}
+                                    title={el.id}
                                 />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {el.title}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary" component="p">
+                                    {/*<Typography variant="body2" color="textSecondary" component="p">
                                         {el.short_desc}
-                                    </Typography>
+                                    </Typography>*/}
                                 </CardContent>
                             </CardActionArea>
                             <CardActions className={classes.btnDiv}>

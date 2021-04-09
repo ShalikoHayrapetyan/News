@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {
-    BrowserRouter as Router,
     Link,
 } from "react-router-dom";
-import CreateUserForm from '../adminka/CreateUserForm';
+import CreateUserForm from '../adminka/forms/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { auth, db } from '../App';
-import UserSignInForm from '../adminka/UserSignInForm';
+import { auth } from '../App';
+import UserSignInForm from '../adminka/forms/UserSignInForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,7 +48,7 @@ const Header = () => {
         <div className="headerNav">
             <div className="container">
                 <div className="headerNav__top">
-                    <h2 className="logo">Best news</h2>
+                    <Link to='/'><img src="./logo.png" alt="Aca news" className='logo' /></Link>
 
                     <div className="headerNav__user">
                         {localUserEmail ?

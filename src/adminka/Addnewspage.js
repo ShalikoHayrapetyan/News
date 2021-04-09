@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -9,14 +9,9 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '../App'
-import { Redirect, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
-
-
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
