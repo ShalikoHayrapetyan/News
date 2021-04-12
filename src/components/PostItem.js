@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
+import {  Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,12 +46,17 @@ const PostItem = (props) => {
     let { title, short_desc, coverImage, like, date, id } = props.news
     const classes = useStyles();
 
-    if (coverImage.length === 0) { coverImage = "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg" }
 
+
+    if (coverImage.length === 0) { coverImage = "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg" }
+    
 
     return (
-        <div className="article">
+        
+        <div  className="article">
+            
             <Card className={classes.root}>
+            <Link to= {`/news:${id}`} >
                 <CardHeader
                     title={title}
                     subheader={date}
@@ -65,8 +71,9 @@ const PostItem = (props) => {
                         {short_desc}
                     </Typography>
                 </CardContent>
+                </Link>
                 <CardActions disableSpacing >
-                    <IconButton aria-label="add to favorites" className={classes.icons}>
+                    <IconButton  aria-label="add to favorites" className={classes.icons}>
                         <FavoriteIcon className={classes.iconSVg} />{like}
                     </IconButton>
                     <IconButton aria-label="comments" className={classes.icons}>
@@ -74,7 +81,9 @@ const PostItem = (props) => {
                     </IconButton>
                 </CardActions>
             </Card>
+              
         </div >
+     
     )
 
 }
