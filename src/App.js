@@ -15,6 +15,9 @@ import { useEffect } from 'react';
 import LinearIndeterminate from './adminka/Loading';
 import AllNewsInCategory from './components/AllNewsInCategory';
 import NewsPage from './components/NewsPage';
+import { getAllNewsData, getAllCategoryData } from './getFunctions';
+import Header from './components/Header';
+import Main from './components/Main';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -36,46 +39,46 @@ function App() {
   const categoriesData = useSelector(state => state.fireBaseData.categoryData);
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
 
-  function getAllNewsData() {
-    db.collection("news")
-      .orderBy("timestamp")
-      .get()
-      .then((querySnapshot) => {
-        const all = []
-        querySnapshot.forEach((doc) => {
-          all.push(doc.data())
-        });
-        dispatch({
-          type: 'getNewsData',
-          payload: {
-            data: all.reverse()
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      })
-  }
-  function getAllCategoryData() {
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
-        const all = []
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          all.push(doc.data())
-        });
-        dispatch({
-          type: 'setCatgeoryData',
-          payload: {
-            data: all
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      })
-  }
+  // function getAllNewsData() {
+  //   db.collection("news")
+  //     .orderBy("timestamp")
+  //     .get()
+  //     .then((querySnapshot) => {
+  //       const all = []
+  //       querySnapshot.forEach((doc) => {
+  //         all.push(doc.data())
+  //       });
+  //       dispatch({
+  //         type: 'getNewsData',
+  //         payload: {
+  //           data: all.reverse()
+  //         }
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error getting documents: ", error);
+  //     })
+  // }
+  // function getAllCategoryData() {
+  //   db.collection("categories")
+  //     .get()
+  //     .then((querySnapshot) => {
+  //       const all = []
+  //       querySnapshot.forEach((doc) => {
+  //         // doc.data() is never undefined for query doc snapshots
+  //         all.push(doc.data())
+  //       });
+  //       dispatch({
+  //         type: 'setCatgeoryData',
+  //         payload: {
+  //           data: all
+  //         }
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error getting documents: ", error);
+  //     })
+  // }
 
 
 
@@ -83,8 +86,8 @@ function App() {
   if (categoriesData) categoryPath = categoriesData.map(category => "/" + category.title)
 
   useEffect(() => {
-    getAllNewsData()
-    getAllCategoryData()
+    getAllNewsData(dispatch)
+    getAllCategoryData(dispatch)
     auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
@@ -123,25 +126,12 @@ function App() {
       ) : categoriesData && allNewsData ? (
         <Router>
           <Switch>
-            <Route exact path="/">
-              <HomePage />
-            </Route>
-            <Route path="/admin">
+          <Route path="/admin">
               <AdminPage />
             </Route>
-            <Route path="/user">
-              <CreateUserForm />
+            <Route path="/">
+              <Main />
             </Route>
-            <Route path="/News">
-              <AllNewsInCategory />
-            </Route>
-            <Route path={categoryPath}>
-              <AllNewsInCategory />
-            </Route>
-            <Route path="/test">
-              <NewsPage />
-            </Route>
-            <Redirect to="/" />
           </Switch>
         </Router>
       ) : <LinearIndeterminate />}
