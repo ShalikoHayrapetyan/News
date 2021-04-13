@@ -12,7 +12,7 @@ const Aside = () => {
         <div className="aside">
             <Weather/>
             {
-                allNewsData && allNewsData.slice(0, 15).map(el => (
+                allNewsData && allNewsData.slice(0, 10).map(el => (
                     <div key={el.id}>
                         <div><b>{el.date} </b></div>
                         <Link to= {`/news:${el.id}`} >

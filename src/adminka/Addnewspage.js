@@ -101,7 +101,7 @@ const Addnewspage = () => {
                 short_desc: shortDesc,
                 desc: desc,
                 id: uniqId,
-                like: 0,
+                like: [],
                 coverImage: coverImage,
                 images: images,
                 date: new Date().toDateString(),
@@ -300,7 +300,7 @@ const Addnewspage = () => {
                 error={errors?.titleError}
                 helperText={errors?.titleError ? "Text must be more than 5 simbols" : null}
                 style={{ margin: 15 }}
-                placeholder="Type news title"
+                placeholder="add video URL"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
