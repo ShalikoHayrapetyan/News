@@ -10,10 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
 import {  Link} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { db } from '../App';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 345,
+        minHeight: 412,
     },
     media: {
         height: 0,
@@ -42,15 +45,43 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+const defImgUrl="https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg"
+
+
 const PostItem = (props) => {
     let { title, short_desc, coverImage, like, date, id } = props.news
+    if (!coverImage.length)  coverImage = defImgUrl 
+    const localUserEmail = useSelector(state => state.authReducer.adminEmail);
+    const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
+    const dispatch =useDispatch()
     const classes = useStyles();
+     const updateNews = () => {
+        let index =allNewsData.indexOf(props.news)
+        let newData=[...allNewsData]
+        newData[index]={...props.news , like }
+        dispatch({
+            type: 'likesData',
+            payload: {
+              data: newData
+            }
+          });
+        const washingtonRef = db.collection("news").doc(id);
+        return washingtonRef.update({
+            like
+        })  
+    }
+     const handleOnLike = () =>{
+         if(localUserEmail){
+            if(like.includes(localUserEmail)  ) {
+                    like =like.filter(name => name!==localUserEmail)
 
-
-
-    if (coverImage.length === 0) { coverImage = "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg" }
-    
-
+                    }else{ 
+                        like=[...like ,localUserEmail]
+                    
+                    }
+                    updateNews()
+         }else alert("Pleasa Sign in or Sign Up")
+    }
     return (
         
         <div  className="article">
@@ -73,8 +104,8 @@ const PostItem = (props) => {
                 </CardContent>
                 </Link>
                 <CardActions disableSpacing >
-                    <IconButton  aria-label="add to favorites" className={classes.icons}>
-                        <FavoriteIcon className={classes.iconSVg} />{like}
+                    <IconButton onClick={handleOnLike} aria-label="add to favorites" className={classes.icons}>
+                        <FavoriteIcon className={classes.iconSVg} />{like.length}
                     </IconButton>
                     <IconButton aria-label="comments" className={classes.icons}>
                         <CommentIcon className={classes.iconSVg} />7

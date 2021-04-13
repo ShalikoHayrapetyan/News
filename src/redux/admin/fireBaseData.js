@@ -18,6 +18,13 @@ const fireBaseData = (state = initialState, action) => {
                     categoryData: action.payload.data
                                 
                 };
+                case "likesData":
+                    return {
+                        ...state,
+                        allNewsData: action.payload.data
+                                    
+                                    
+                    };
         default:
             return state
 

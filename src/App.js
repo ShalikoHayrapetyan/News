@@ -11,7 +11,7 @@ import {
 import HomePage from './components/HomePage';
 import CreateUserForm from './adminka/forms/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LinearIndeterminate from './adminka/Loading';
 import AllNewsInCategory from './components/AllNewsInCategory';
 import NewsPage from './components/NewsPage';
@@ -38,52 +38,14 @@ function App() {
   const isAuthenticating = useSelector(state => state.authReducer.isAuthenticating)
   const categoriesData = useSelector(state => state.fireBaseData.categoryData);
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
+  const [isUnmounted, setIsUnmounted] = useState(false);
 
-  // function getAllNewsData() {
-  //   db.collection("news")
-  //     .orderBy("timestamp")
-  //     .get()
-  //     .then((querySnapshot) => {
-  //       const all = []
-  //       querySnapshot.forEach((doc) => {
-  //         all.push(doc.data())
-  //       });
-  //       dispatch({
-  //         type: 'getNewsData',
-  //         payload: {
-  //           data: all.reverse()
-  //         }
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log("Error getting documents: ", error);
-  //     })
-  // }
-  // function getAllCategoryData() {
-  //   db.collection("categories")
-  //     .get()
-  //     .then((querySnapshot) => {
-  //       const all = []
-  //       querySnapshot.forEach((doc) => {
-  //         // doc.data() is never undefined for query doc snapshots
-  //         all.push(doc.data())
-  //       });
-  //       dispatch({
-  //         type: 'setCatgeoryData',
-  //         payload: {
-  //           data: all
-  //         }
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log("Error getting documents: ", error);
-  //     })
-  // }
 
 
 
   let categoryPath = []
   if (categoriesData) categoryPath = categoriesData.map(category => "/" + category.title)
+  useEffect(() => () => setIsUnmounted(true), [])
 
   useEffect(() => {
     getAllNewsData(dispatch)
@@ -94,14 +56,16 @@ function App() {
           type: 'isAuthenticating',
           payload: true
         });
-        db.collection("users").where("userName", "==", user.email)
+        db.collection("users").where("userEmail", "==", user.email)
           .get()
           .then((querySnapshot) => {
+            if (isUnmounted) return;
             querySnapshot.forEach((doc) => {
               dispatch({
                 type: 'signIn',
                 payload: {
                   adminEmail: user.email,
+                  adminName: doc.data().userName,
                   role: doc.data().role
                 }
               });

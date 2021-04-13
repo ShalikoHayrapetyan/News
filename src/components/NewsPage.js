@@ -6,10 +6,13 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import { v4 as uuidv4 } from 'uuid';
 //import tileData from './tileData';
 import Aside from './Aside';
 import { useLocation } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { db } from '../App';
+import CommentsBox from './actions/CommentsBox';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,8 +36,41 @@ const NewsPage = () => {
     const classes = useStyles();
     let newsId = useLocation().pathname.substring(6)
     const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
+    const localUserEmail = useSelector(state => state.authReducer.adminEmail);
+    const dispatch =useDispatch()
+
+
     let selectedNews = allNewsData.find(news => news.id === newsId)
-    console.log(selectedNews)
+    let {like ,id }=selectedNews
+    const updateNews = () => {
+        let index =allNewsData.indexOf(selectedNews)
+        let newData=[...allNewsData]
+        newData[index]={...selectedNews , like }
+        dispatch({
+            type: 'likesData',
+            payload: {
+              data: newData
+            }
+          });
+        const washingtonRef = db.collection("news").doc(id);
+        return washingtonRef.update({
+            like
+        })  
+    }
+    const handleOnLike = () =>{
+        if(localUserEmail){
+           if(like.includes(localUserEmail)  ) {
+                   like =like.filter(name => name!==localUserEmail)
+
+                   }else{ 
+                       like=[...like ,localUserEmail]
+                   
+                   }
+                   updateNews()
+        }else alert("Pleasa Sign in or Sign Up")
+      
+   }
+
     return (
         <div className="container">
             <div className="site-content">
@@ -44,7 +80,7 @@ const NewsPage = () => {
                         <div className="article-body__head">
                             <p className="flex-icon"><CalendarTodayIcon /> {selectedNews.date}</p>
                             <p className="flex-icon"><RateReviewIcon /> {selectedNews.category}</p>
-                            <p className="flex-icon"><FavoriteIcon /> 37</p>
+                            <p className="flex-icon"><FavoriteIcon onClick={handleOnLike} />{like.length} </p>
                             <p className="flex-icon"><CommentIcon /> 14</p>
                         </div>
                         <h4>{selectedNews.short_desc}</h4>
@@ -53,13 +89,14 @@ const NewsPage = () => {
                         {selectedNews.images.length > 2 ? <div className={classes.root}>
                             <GridList cellHeight={160} className={classes.gridList} cols={3}>
                                 {selectedNews.images.map((img, index, arr) => (
-                                    <GridListTile key={selectedNews.id} cols={1}>
+                                    <GridListTile key={uuidv4()} cols={1}>
                                         <img className={classes.img} src={img} alt={selectedNews.title} />
                                     </GridListTile>
                                 ))}
                             </GridList>
                         </div> : selectedNews.images.map(img => <img key={selectedNews.id} src={img} />)}
                     </div>
+                    <CommentsBox />
                 </div>
 
                 <Aside />

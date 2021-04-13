@@ -62,7 +62,7 @@ export default function AdminSignIn() {
     const handleSignInAdmin = (e) => {
         e.preventDefault()
         let role = ""
-        db.collection("users").where("userName", "==", login)
+        db.collection("users").where("userEmail", "==", login)
             .get()
             .then((querySnapshot) => {
                 if (querySnapshot.docs.length === 0) throw ""
