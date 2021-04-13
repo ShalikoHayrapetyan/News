@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import Weather from "./Weather"
 
 const Aside = () => {
 
@@ -6,6 +7,7 @@ const Aside = () => {
 
     return (
         <div className="aside">
+            <Weather/>
             {
                 allNewsData && allNewsData.slice(0, 15).map(el => (
                     <div key={el.id}>

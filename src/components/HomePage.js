@@ -5,6 +5,7 @@ import PostItem from './PostItem';
 import Footer from "./Footer";
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const HomePage = () => {
   const dispatch = useDispatch();
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);

@@ -1,6 +1,7 @@
 const initialState = {
     allNewsData: null,
     categoryData:null
+
 }
 
 const fireBaseData = (state = initialState, action) => {
@@ -18,6 +19,7 @@ const fireBaseData = (state = initialState, action) => {
                     categoryData: action.payload.data
                                 
                 };
+
         default:
             return state
 
