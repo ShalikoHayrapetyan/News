@@ -1,6 +1,7 @@
 const initialState = {
 
         adminEmail: null,
+        adminName: null,
         role:null,
         isAuthenticating: false
 }
@@ -10,6 +11,7 @@ const authReducer = (state = initialState, action) => {
         case "signIn":
             return {
                 adminEmail:action.payload.adminEmail,
+                adminName:action.payload.adminName,
                 role:action.payload.role,
 
             };

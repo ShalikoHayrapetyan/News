@@ -30,7 +30,7 @@ const Header = () => {
     const classes = useStyles();
     const [isSignIn, setisSignIn] = useState(false)
     const [isSignUp, setisSignUp] = useState(false)
-    const localUserEmail = useSelector(state => state.authReducer.adminEmail);
+    const localUserName = useSelector(state => state.authReducer.adminName);
     const categoriesData = useSelector(state => state.fireBaseData.categoryData);
 
     const handleLogout = () => {
@@ -52,9 +52,9 @@ const Header = () => {
                     <Link to='/'><img src="./logo.png" alt="Aca news" className='logo' /></Link>
                     <Rate />
                     <div className="headerNav__user">
-                        {localUserEmail ?
+                        {localUserName ?
                             <div>
-                                {localUserEmail}
+                                {localUserName}
                                 <Button size="small" variant="outlined" color="secondary" onClick={handleLogout} className={classes.logout}>
                                     Sign out
                             </Button>

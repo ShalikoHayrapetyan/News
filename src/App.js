@@ -1,20 +1,20 @@
-
-import './App.css';
+import { useEffect, useState } from 'react';
 import firebase from 'firebase';
-import AdminPage from './adminka/AdminPage'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
 } from "react-router-dom";
-import HomePage from './components/HomePage';
-import CreateUserForm from './adminka/forms/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+
+import AdminPage from './adminka/AdminPage'
 import LinearIndeterminate from './adminka/Loading';
-import AllNewsInCategory from './components/AllNewsInCategory';
-import NewsPage from './components/NewsPage';
+import { getAllNewsData, getAllCategoryData } from './getFunctions';
+import Main from './components/Main';
+import { fetchAllNews } from './redux/asyncNewsActions';
+
+import './App.css';
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -35,70 +35,32 @@ function App() {
   const isAuthenticating = useSelector(state => state.authReducer.isAuthenticating)
   const categoriesData = useSelector(state => state.fireBaseData.categoryData);
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
+  const [isUnmounted, setIsUnmounted] = useState(false);
 
-  function getAllNewsData() {
-    db.collection("news")
-      .orderBy("timestamp")
-      .get()
-      .then((querySnapshot) => {
-        const all = []
-        querySnapshot.forEach((doc) => {
-          all.push(doc.data())
-        });
-        dispatch({
-          type: 'getNewsData',
-          payload: {
-            data: all.reverse()
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      })
-  }
-  function getAllCategoryData() {
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
-        const all = []
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          all.push(doc.data())
-        });
-        dispatch({
-          type: 'setCatgeoryData',
-          payload: {
-            data: all
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      })
-  }
-
-
-
-  let categoryPath = []
+  let categoryPath = [];
   if (categoriesData) categoryPath = categoriesData.map(category => "/" + category.title)
+  useEffect(() => () => setIsUnmounted(true), [])
 
   useEffect(() => {
-    getAllNewsData()
-    getAllCategoryData()
-    auth.onAuthStateChanged((user) => {
+    dispatch(fetchAllNews())
+    getAllNewsData(dispatch)
+    getAllCategoryData(dispatch)
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
           type: 'isAuthenticating',
           payload: true
         });
-        db.collection("users").where("userName", "==", user.email)
+        db.collection("users").where("userEmail", "==", user.email)
           .get()
           .then((querySnapshot) => {
+            if (isUnmounted) return;
             querySnapshot.forEach((doc) => {
               dispatch({
                 type: 'signIn',
                 payload: {
                   adminEmail: user.email,
+                  adminName: doc.data().userName,
                   role: doc.data().role
                 }
               });
@@ -114,6 +76,7 @@ function App() {
           })
       }
     });
+    return () => unsubscribe()
   }, []);
 
   return (
@@ -123,25 +86,12 @@ function App() {
       ) : categoriesData && allNewsData ? (
         <Router>
           <Switch>
-            <Route exact path="/">
-              <HomePage />
-            </Route>
             <Route path="/admin">
               <AdminPage />
             </Route>
-            <Route path="/user">
-              <CreateUserForm />
+            <Route path="/">
+              <Main />
             </Route>
-            <Route path="/News">
-              <AllNewsInCategory />
-            </Route>
-            <Route path={categoryPath}>
-              <AllNewsInCategory />
-            </Route>
-            <Route path="/test">
-              <NewsPage />
-            </Route>
-            <Redirect to="/" />
           </Switch>
         </Router>
       ) : <LinearIndeterminate />}

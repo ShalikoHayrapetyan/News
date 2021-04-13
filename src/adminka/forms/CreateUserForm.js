@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 class CreateUserForm extends Component {
 
   state = {
+    name : "",
     email: "",
     password: "",
     passwordConfrim: "",
@@ -32,11 +33,12 @@ class CreateUserForm extends Component {
     });
   };
 
-  handleChange = name => e => {
+  handleChange = text => e => {
     this.setState({
-      [name]: e.target.value
+      [text]: e.target.value
     });
   };
+
 
   passwordMatch = () => this.state.password === this.state.passwordConfrim;
   validateEmail = (email) => {
@@ -49,7 +51,7 @@ class CreateUserForm extends Component {
   };
 
   isValid = () => {
-    if (this.state.email === "") {
+    if (this.state.email === "" || this.state.name === "" ) {
       return false;
     }
     return true;
@@ -72,6 +74,7 @@ class CreateUserForm extends Component {
       return
     }
     const newUserCredentials = {
+      name: this.state.name,
       email: this.state.email,
       password: this.state.password,
       passwordConfrim: this.state.passwordConfrim
@@ -80,11 +83,15 @@ class CreateUserForm extends Component {
     auth.createUserWithEmailAndPassword(newUserCredentials.email, newUserCredentials.password)
       .then((userCredential) => {
         db.collection("users").doc(userCredential.user.uid).set({
-          userName: newUserCredentials.email,
+          userName: newUserCredentials.name,
+          userEmail: newUserCredentials.email,
           role: "user",
         }).then(() => {
-          console.log("Document successfully written!");
-          this.props.setisSignUp(false)
+
+          /**
+           * @todo (Shaliko) figure out what's the problem
+           */
+          this.props.setisSignUp(() => false)
         })
           .catch((error) => {
             console.error("Error writing document: ", error);
@@ -124,6 +131,19 @@ class CreateUserForm extends Component {
                 className={classes.inputs}
                 disableUnderline={true}
                 onChange={this.handleChange("email")}
+              />
+            </FormControl>
+            <FormControl required fullWidth margin="normal">
+              <InputLabel htmlFor="email" className={classes.labels}>
+                name
+              </InputLabel>
+              <Input
+                name="name"
+                type="text"
+                autoComplete="name"
+                className={classes.inputs}
+                disableUnderline={true}
+                onChange={this.handleChange("name")}
               />
             </FormControl>
 

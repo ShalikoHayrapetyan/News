@@ -1,5 +1,8 @@
 import { useSelector } from "react-redux";
 import Weather from "./Weather"
+import {  Link} from "react-router-dom";
+
+
 
 const Aside = () => {
 
@@ -12,9 +15,11 @@ const Aside = () => {
                 allNewsData && allNewsData.slice(0, 15).map(el => (
                     <div key={el.id}>
                         <div><b>{el.date} </b></div>
+                        <Link to= {`/news:${el.id}`} >
                         <div className="asideTexts">
                             {el.short_desc}
                         </div>
+                        </Link>
                     </div>)
                 )
             }
