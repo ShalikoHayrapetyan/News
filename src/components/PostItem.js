@@ -9,9 +9,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CommentIcon from '@material-ui/icons/Comment';
-import {  Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { db } from '../App';
+
+import { debounce } from 'lodash';
+import newsSvc from '../services/newsSvc';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,63 +47,66 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const defImgUrl="https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg"
+const defImgUrl = "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg"
 
+
+const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200)
 
 const PostItem = (props) => {
     let { title, short_desc, coverImage, like, date, id } = props.news
-    if (!coverImage.length)  coverImage = defImgUrl 
+    if (!coverImage.length) coverImage = defImgUrl
     const localUserEmail = useSelector(state => state.authReducer.adminEmail);
     const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
     const classes = useStyles();
-     const updateNews = () => {
-        let index =allNewsData.indexOf(props.news)
-        let newData=[...allNewsData]
-        newData[index]={...props.news , like }
+
+    const updateNews = () => {
+
+        let index = allNewsData.indexOf(props.news)
+        let newData = [...allNewsData]
+        newData[index] = { ...props.news, like }
         dispatch({
             type: 'likesData',
             payload: {
-              data: newData
+                data: newData
             }
-          });
-        const washingtonRef = db.collection("news").doc(id);
-        return washingtonRef.update({
-            like
-        })  
-    }
-     const handleOnLike = () =>{
-         if(localUserEmail){
-            if(like.includes(localUserEmail)  ) {
-                    like =like.filter(name => name!==localUserEmail)
+        });
 
-                    }else{ 
-                        like=[...like ,localUserEmail]
-                    
-                    }
-                    updateNews()
-         }else alert("Pleasa Sign in or Sign Up")
+        updateNewsLikedStatus(id, like);
+
+    }
+    const handleOnLike = () => {
+        if (localUserEmail) {
+            if (like.includes(localUserEmail)) {
+                like = like.filter(name => name !== localUserEmail)
+
+            } else {
+                like = [...like, localUserEmail]
+
+            }
+            updateNews()
+        } else alert("Pleasa Sign in or Sign Up")
     }
     return (
-        
-        <div  className="article">
-            
+
+        <div className="article">
+
             <Card className={classes.root}>
-            <Link to= {`/news:${id}`} >
-                <CardHeader
-                    title={title}
-                    subheader={date}
-                />
-                <CardMedia
-                    className={classes.media}
-                    image={coverImage}
-                    title={id}
-                />
-                <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.short}>
-                        {short_desc}
-                    </Typography>
-                </CardContent>
+                <Link to={`/news:${id}`} >
+                    <CardHeader
+                        title={title}
+                        subheader={date}
+                    />
+                    <CardMedia
+                        className={classes.media}
+                        image={coverImage}
+                        title={id}
+                    />
+                    <CardContent>
+                        <Typography variant="body2" color="textSecondary" component="p" className={classes.short}>
+                            {short_desc}
+                        </Typography>
+                    </CardContent>
                 </Link>
                 <CardActions disableSpacing >
                     <IconButton onClick={handleOnLike} aria-label="add to favorites" className={classes.icons}>
@@ -112,9 +117,9 @@ const PostItem = (props) => {
                     </IconButton>
                 </CardActions>
             </Card>
-              
+
         </div >
-     
+
     )
 
 }
