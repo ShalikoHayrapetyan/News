@@ -1,23 +1,20 @@
-
-import './App.css';
+import { useEffect, useState } from 'react';
 import firebase from 'firebase';
-import AdminPage from './adminka/AdminPage'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
 } from "react-router-dom";
-import HomePage from './components/HomePage';
-import CreateUserForm from './adminka/forms/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+
+import AdminPage from './adminka/AdminPage'
 import LinearIndeterminate from './adminka/Loading';
-import AllNewsInCategory from './components/AllNewsInCategory';
-import NewsPage from './components/NewsPage';
 import { getAllNewsData, getAllCategoryData } from './getFunctions';
-import Header from './components/Header';
 import Main from './components/Main';
+import { fetchAllNews } from './redux/asyncNewsActions';
+
+import './App.css';
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -40,17 +37,15 @@ function App() {
   const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
   const [isUnmounted, setIsUnmounted] = useState(false);
 
-
-
-
-  let categoryPath = []
+  let categoryPath = [];
   if (categoriesData) categoryPath = categoriesData.map(category => "/" + category.title)
   useEffect(() => () => setIsUnmounted(true), [])
 
   useEffect(() => {
+    dispatch(fetchAllNews())
     getAllNewsData(dispatch)
     getAllCategoryData(dispatch)
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
           type: 'isAuthenticating',
@@ -81,6 +76,7 @@ function App() {
           })
       }
     });
+    return () => unsubscribe()
   }, []);
 
   return (
@@ -90,7 +86,7 @@ function App() {
       ) : categoriesData && allNewsData ? (
         <Router>
           <Switch>
-          <Route path="/admin">
+            <Route path="/admin">
               <AdminPage />
             </Route>
             <Route path="/">
