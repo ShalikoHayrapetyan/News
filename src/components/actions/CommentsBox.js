@@ -1,13 +1,14 @@
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-    contain :{
+    contain: {
         border: "1px solid gray",
+        marginTop: '30px',
     },
     dialogbox: {
         display: "flex",
         width: "100%",
-        marginBottom:10,
+        marginBottom: 10,
         padding: 5
     },
     authorName: {
@@ -55,7 +56,7 @@ const CommentsBox = () => {
 
 
 
-    return (<div  className={classes.contain}>
+    return (<div className={classes.contain}>
         <div className={classes.dialogbox}>
             <p className={classes.authorName}>AuthorName</p>
             <div className={classes.body}>
@@ -75,8 +76,8 @@ const CommentsBox = () => {
                 </div>
             </div>
         </div>
-   
-        </div >
+
+    </div >
     )
 }
 

@@ -143,12 +143,30 @@ html, body {
 
 .aside {
   width: 280px;
+  margin-top: 52px;
 }
 
 .aside > div{
   border-bottom:1px solid #ccc;
   margin-bottom: 15px;
 }
+
+.aside > div[class*="container"] {
+  margin-bottom: 35px;
+}
+
+.aside a {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.link-new {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+}
+
+.link-new:hover {
+  color:#3f51b5;
+} 
 
 .aside__banner {
   max-width: 100%;
@@ -194,14 +212,16 @@ html, body {
 .article-body__head {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .article-body img {
   max-width: 100%;
+  margin-right: 10px;
 }
 
 .article-body img + img {
-  margin-left: 15px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 1140px) {
@@ -235,6 +255,10 @@ html, body {
     width: 48%;
   }
 
+  .article-body {
+    padding-right: 0;
+  }
+
   .article:nth-child(even) {
     margin-right: 0;
   }
@@ -266,9 +290,17 @@ html, body {
     margin-bottom: 12px;
   }
 
+  .article-body img + img {
+    margin-bottom: 5px;
+  }
+
   .logo {
     width: 110px;
-}
+  }
+
+  .header__rate {
+    display: none;
+  }
 
   .headerNav__user {
     font-size: 14px;

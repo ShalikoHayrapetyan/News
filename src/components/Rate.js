@@ -3,18 +3,18 @@ import { db } from '../App'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { makeStyles } from '@material-ui/core/styles';
-import {red, green} from '@material-ui/core/colors';
+import { red, green } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
-         
-          display: 'flex',
-          flexDirection: "row",
-          '& > *': {
-            margin: theme.spacing(1),
-        },
-      },
+
+    display: 'flex',
+    flexDirection: "row",
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
 
 }));
 
@@ -55,26 +55,26 @@ const Rate = () => {
   const rateChart = (rate) => {
 
     if (Number(prevRateData[rate]) > Number(rateData[rate]) || Number(prevRateData[rate]) < Number(rateData[rate])) {
-      prevRateData['prev'+rate] = prevRateData[rate]
+      prevRateData['prev' + rate] = prevRateData[rate]
       prevRateData[rate] = rateData[rate]
       setPrevRateData(prevRateData)
       db.collection("rate").doc("rateStatistic").set(prevRateData)
     }
     if (Number(prevRateData['prev' + rate]) > Number(prevRateData[rate])) {
-      return <div key ={rate} className={classes.root}>
-        <ArrowDropDownIcon style={{ color: red[500] }}/>
+      return <div key={rate} className={classes.root}>
+        <ArrowDropDownIcon style={{ color: red[500] }} />
         <p>{`${rate} ${prevRateData[rate]}`}</p>
       </div>
     }
-   
+
     return <div key={rate} className={classes.root}>
-      <ArrowDropUpIcon style={{ color: green[500] }}/>
+      <ArrowDropUpIcon style={{ color: green[500] }} />
       <p>{`${rate} ${prevRateData[rate]}`}</p>
     </div>
   }
 
   return (
-    <div>
+    <div className="header__rate">
       {isLoaded ? <div className={classes.root}>
         {rateChart('EUR')}
         {rateChart('RUB')}
