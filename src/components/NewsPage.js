@@ -13,6 +13,9 @@ import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { db } from '../App';
 import CommentsBox from './actions/CommentsBox';
+import newsSvc from '../services/newsSvc';
+import { debounce } from 'lodash';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,12 +41,13 @@ const NewsPage = () => {
     const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
     const localUserEmail = useSelector(state => state.authReducer.adminEmail);
     const dispatch =useDispatch()
+    const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200)
 
 
     let selectedNews = allNewsData.find(news => news.id === newsId)
-    let {like ,id }=selectedNews
+    let index =allNewsData.indexOf(selectedNews)
+    let {like ,id,comments }=selectedNews
     const updateNews = () => {
-        let index =allNewsData.indexOf(selectedNews)
         let newData=[...allNewsData]
         newData[index]={...selectedNews , like }
         dispatch({
@@ -52,10 +56,8 @@ const NewsPage = () => {
               data: newData
             }
           });
-        const washingtonRef = db.collection("news").doc(id);
-        return washingtonRef.update({
-            like
-        })  
+          updateNewsLikedStatus(id, like);
+
     }
     const handleOnLike = () =>{
         if(localUserEmail){
@@ -81,7 +83,7 @@ const NewsPage = () => {
                             <p className="flex-icon"><CalendarTodayIcon /> {selectedNews.date}</p>
                             <p className="flex-icon"><RateReviewIcon /> {selectedNews.category}</p>
                             <p className="flex-icon"><FavoriteIcon onClick={handleOnLike} />{like.length} </p>
-                            <p className="flex-icon"><CommentIcon /> 14</p>
+                            <p className="flex-icon"><CommentIcon />{comments.length}</p>
                         </div>
                         <h4>{selectedNews.short_desc}</h4>
                         <img src={selectedNews.coverImage} alt="" width="100%" />
@@ -96,7 +98,7 @@ const NewsPage = () => {
                             </GridList>
                         </div> : selectedNews.images.map(img => <img key={selectedNews.id} src={img} />)}
                     </div>
-                    <CommentsBox />
+                    <CommentsBox id={id} comments={comments} index={index} />
                 </div>
 
                 <Aside />

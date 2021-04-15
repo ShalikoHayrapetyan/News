@@ -1,14 +1,19 @@
 import { makeStyles } from "@material-ui/core";
+import { update } from "lodash";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import newsSvc from '../../services/newsSvc';
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 const useStyles = makeStyles((theme) => ({
-    contain :{
-        border: "1px solid gray",
+    contain: {
+        width: "95%",
     },
     dialogbox: {
         display: "flex",
         width: "100%",
-        marginBottom:10,
-        padding: 5
     },
     authorName: {
         paddingTop: 17,
@@ -44,38 +49,93 @@ const useStyles = makeStyles((theme) => ({
         borderTopColor: "transparent",
         borderLeftColor: "transparent",
         borderBottomColor: "transparent",
+    },
+    comment_form: {
+        width: "100%",
+        display: "flex",
+        height: 50
+
+    },
+    textarea: {
+        width: "90%"
+    },
+    send_btn: {
+        marginLeft: 5,
+        width: 75
+    },
+    time:{
+        float:"right",
+        margin: 0,
+        color:"gray"
+    },
+    text:{
+       color:"black"
     }
 }),
 )
 
 
-const CommentsBox = () => {
+const CommentsBox = (props) => {
+    const { id, comments, index } = props
     const classes = useStyles();
+    const dispatch = useDispatch()
+    const [text, setText] = useState("")
+    const localUserName = useSelector(state => state.authReducer.adminName);
 
+    const handleOnBtn = () => {
+        if (localUserName) {
+            if (text) {
+                let today = new Date();
+                let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                let dateTime = date+' '+time;
+                const comment = {
+                    text,
+                    author: localUserName,
+                    dateTime
+                }
+                const commentsData = [...comments, comment]
+                dispatch({
+                    type: 'CommentsData',
+                    payload: {
+                        index,
+                        commentsData
+                    } 
+                })
+                newsSvc.updateCommentsData(id, commentsData)
+                setText("")
+            }
+        } else alert("Please Sign in or Sign up")
+    }
 
-
-
-    return (<div  className={classes.contain}>
-        <div className={classes.dialogbox}>
-            <p className={classes.authorName}>AuthorName</p>
-            <div className={classes.body}>
-                <span className={classes.tip_left}> </span>
-                <div className={classes.message}>
-                    <span>I just made a comment abo</span>
-                </div>
+    return (
+        <div className={classes.contain}>
+            <div className={classes.comment_form}>
+                <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    className={classes.textarea}
+                    placeholder="Comments text"
+                />
+                <button onClick={handleOnBtn} className={classes.send_btn}>Send</button>
             </div>
-        </div>
-
-        <div className={classes.dialogbox}>
-            <p className={classes.authorName}>AuthorName</p>
-            <div className={classes.body}>
-                <span className={classes.tip_left}> </span>
-                <div className={classes.message}>
-                    <span>I just made a comment  just made a comment  just made a comment  just made a comment abo</span>
+            { comments.length ? comments.map(com => (
+                <div key={uuidv4()} className={classes.dialogbox}>
+                <p className={classes.authorName}>{com.author}</p>
+                <div className={classes.body}>
+                    <span className={classes.tip_left}> </span>
+                    <div className={classes.message}>
+                        <span className={classes.text} >{com.text}</span>
+                    </div>   
+                    <p className={classes.time}>  {com.dateTime}</p>
                 </div>
+                
             </div>
-        </div>
-   
+            )) : null} 
+
+
+            
+
         </div >
     )
 }

@@ -1,3 +1,4 @@
+import produce from "immer"
 const initialState = {
     allNewsData: null,
     categoryData:null
@@ -26,6 +27,11 @@ const fireBaseData = (state = initialState, action) => {
                                     
                                     
                     };
+                    case "CommentsData":
+                        return produce(state, draftState =>{
+                            draftState.allNewsData[action.payload.index]["comments"]=action.payload.commentsData
+
+                        } )
         default:
             return state
 
