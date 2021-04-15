@@ -299,5 +299,4 @@ const Addnewspage = () => {
     )
 }
 
-
 export default Addnewspage;
