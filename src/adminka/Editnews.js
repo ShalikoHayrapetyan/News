@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ReactPlayer from "react-player"
+
 
 
 
@@ -55,6 +57,7 @@ const Editnews = () => {
     const [coverImage, setCoverImage] = useState("")
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
+    const [video, setVideo] = useState('')
     let history = useHistory()
 
     useEffect(() => {
@@ -84,6 +87,7 @@ const Editnews = () => {
                     setCategory(doc.data().category)
                     setImages(doc.data().images)
                     setCoverImage(doc.data().coverImage)
+                    setVideo(doc.data().video)
                     
                 });
 
@@ -275,6 +279,26 @@ const Editnews = () => {
                     <Button variant="contained" color="primary" component="span">Upload</Button> images
                 </label>
                 <div>{imagesList(images)}</div>
+
+                <div>
+            <TextField
+                value={video}
+                onChange={(e) => setVideo(e.target.value)}
+                id="outlined-full-width"
+                label="Video URL"
+                style={{ margin: 15 }}
+                placeholder="add video URL"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                variant="outlined"
+            />
+      <ReactPlayer
+        url={video}
+      />
+      </div>   
 
             </div>
             <div className="save-btn">

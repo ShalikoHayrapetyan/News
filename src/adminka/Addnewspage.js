@@ -12,6 +12,10 @@ import { db, storage } from '../App'
 import { useHistory } from 'react-router';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ReactPlayer from "react-player"
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,6 +57,7 @@ const Addnewspage = () => {
     const [coverImage, setCoverImage] = useState("")
     const [category, setCategory] = useState("")
     const [allCategoriesData, setallCategoriesData] = useState([])
+    const [video, setVideo] = useState('')
 
     useEffect(() => () => setIsUnmounted(true), [])
 
@@ -96,12 +101,13 @@ const Addnewspage = () => {
                 short_desc: shortDesc,
                 desc: desc,
                 id: uniqId,
-                like: 0,
+                like: [],
                 coverImage: coverImage,
                 images: images,
                 date: new Date().toDateString(),
                 category: category,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                video: video 
 
             }).then(() => {
                 console.log("Document successfully written!");
@@ -117,6 +123,7 @@ const Addnewspage = () => {
             setCategory("")
             setCoverImage("")
             setImages([])
+            setVideo('')
         }
 
     }
@@ -283,6 +290,28 @@ const Addnewspage = () => {
                 <div>{imagesList(images)}</div>
 
             </div>
+
+            <div>
+            <TextField
+                value={video}
+                onChange={(e) => setVideo(e.target.value)}
+                id="outlined-full-width"
+                label="Video URL"
+                error={errors?.titleError}
+                helperText={errors?.titleError ? "Text must be more than 5 simbols" : null}
+                style={{ margin: 15 }}
+                placeholder="add video URL"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                variant="outlined"
+            />
+      <ReactPlayer
+        url={video}
+      />
+      </div>      
 
 
             <div className="save-btn">

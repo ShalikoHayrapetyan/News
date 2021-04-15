@@ -1,6 +1,7 @@
 const initialState = {
     allNewsData: null,
     categoryData:null
+
 }
 
 const fireBaseData = (state = initialState, action) => {

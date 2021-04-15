@@ -8,6 +8,7 @@ import CreateUserForm from '../adminka/forms/CreateUserForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from '../App';
 import UserSignInForm from '../adminka/forms/UserSignInForm';
+import Rate from './Rate'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,7 +50,7 @@ const Header = () => {
             <div className="container">
                 <div className="headerNav__top">
                     <Link to='/'><img src="./logo.png" alt="Aca news" className='logo' /></Link>
-
+                    <Rate />
                     <div className="headerNav__user">
                         {localUserName ?
                             <div>
