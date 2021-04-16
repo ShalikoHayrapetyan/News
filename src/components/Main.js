@@ -10,11 +10,7 @@ const Main = () => {
   const categoriesData = useSelector(
     (state) => state.fireBaseData.categoryData
   );
-  const allNewsData = useSelector((state) => state.fireBaseData.allNewsData);
-  let categoryPath = [];
-  let newsPath = [];
-  categoryPath = categoriesData.map((category) => "/" + category.title);
-  newsPath = allNewsData.map((news) => "/news:" + news.id);
+
   return (
     <>
       <Header />
@@ -25,10 +21,7 @@ const Main = () => {
         <Route path="/news/:newsId">
           <NewsPage />
         </Route>
-        <Route path="/News">
-          <AllNewsInCategory />
-        </Route>
-        <Route path={categoryPath}>
+        <Route path="/:catTitle">
           <AllNewsInCategory />
         </Route>
         <Route path="*">

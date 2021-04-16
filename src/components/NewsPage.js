@@ -6,7 +6,7 @@ import RateReviewIcon from "@material-ui/icons/RateReview";
 import { makeStyles } from "@material-ui/core/styles";
 import { v4 as uuidv4 } from "uuid";
 import Aside from "./Aside";
-import { useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import newsSvc from "../services/newsSvc";
 import { debounce } from "lodash";
@@ -45,6 +45,8 @@ const NewsPage = () => {
   const dispatch = useDispatch();
   const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200);
   let selectedNews = allNewsData.find((news) => news.id === newsId);
+  if (!selectedNews) return <Redirect to="/" />;
+
   let index = allNewsData.indexOf(selectedNews);
   let { like, id, comments } = selectedNews;
   const updateNews = () => {
@@ -59,6 +61,7 @@ const NewsPage = () => {
     });
     updateNewsLikedStatus(id, like);
   };
+
   const handleOnLike = () => {
     if (localUserEmail) {
       if (like.includes(localUserEmail)) {

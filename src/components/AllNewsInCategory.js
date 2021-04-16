@@ -1,16 +1,17 @@
 import React, { useMemo, useState } from "react";
-import { useLocation } from "react-router";
+import { Redirect, Route, Switch, useLocation, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import PostItem from "./PostItem";
 import TablePagination from "@material-ui/core/TablePagination";
 
 const AllNewsInCategory = () => {
   const allNewsData = useSelector((state) => state.fireBaseData.allNewsData);
+  
   const [paging, setPaging] = useState({
     current: 0,
     countPerPage: 16,
   });
-  let catTitle = useLocation().pathname.substring(1);
+  let {catTitle} = useParams();
 
   const changeRowsPerPage = (e) => {
     setPaging((current) => ({
@@ -30,6 +31,7 @@ const AllNewsInCategory = () => {
 
       return el.category === catTitle;
     });
+   
   }, [allNewsData, catTitle]);
 
   const visibleNews = useMemo(() => {
@@ -38,6 +40,8 @@ const AllNewsInCategory = () => {
 
     return allFilteredNews.slice(startIndex, endIndex);
   }, [allFilteredNews, paging]);
+
+  if(allFilteredNews.length===0) return <Redirect to="/" />
 
   return (
     <>
