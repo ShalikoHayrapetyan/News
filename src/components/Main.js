@@ -18,8 +18,12 @@ const Main = () => {
         <>
           <Header />
         <Switch>
+          
             <Route exact path="/">
               <HomePage />
+            </Route>
+            <Route path="/news/:newsId">
+              <NewsPage />
             </Route>
             <Route path="/News">
               <AllNewsInCategory />
@@ -27,11 +31,9 @@ const Main = () => {
             <Route path={categoryPath}>
               <AllNewsInCategory />
             </Route>
-            <Route path={newsPath}>
-              <NewsPage />
-            </Route>
-            <Redirect to="/" />
-           
+            <Route path="*">
+                   <Redirect to="/" />
+            </Route>    
         </Switch> 
         <Footer />
         </>

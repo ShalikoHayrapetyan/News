@@ -9,10 +9,13 @@ import GridListTile from '@material-ui/core/GridListTile';
 import { v4 as uuidv4 } from 'uuid';
 //import tileData from './tileData';
 import Aside from './Aside';
-import { useLocation } from 'react-router';
+import { Redirect, useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { db } from '../App';
-import CommentsBox from './actions/CommentsBox';
+import newsSvc from '../services/newsSvc';
+import { debounce } from 'lodash';
+import CommentsBox from './CommentsBox';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,28 +42,29 @@ const useStyles = makeStyles((theme) => ({
 
 const NewsPage = () => {
     const classes = useStyles();
-    let newsId = useLocation().pathname.substring(6)
+   
+    let {newsId}=useParams()
     const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
     const localUserEmail = useSelector(state => state.authReducer.adminEmail);
-    const dispatch = useDispatch()
 
-
+    const dispatch =useDispatch()
+    const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200)
     let selectedNews = allNewsData.find(news => news.id === newsId)
-    let { like, id } = selectedNews
+    let index =allNewsData.indexOf(selectedNews)
+    let {like ,id,comments }=selectedNews
     const updateNews = () => {
-        let index = allNewsData.indexOf(selectedNews)
-        let newData = [...allNewsData]
-        newData[index] = { ...selectedNews, like }
+        let newData=[...allNewsData]
+        newData[index]={...selectedNews , like }
+
         dispatch({
             type: 'likesData',
             payload: {
                 data: newData
             }
-        });
-        const washingtonRef = db.collection("news").doc(id);
-        return washingtonRef.update({
-            like
-        })
+
+          });
+          updateNewsLikedStatus(id, like);
+
     }
     const handleOnLike = () => {
         if (localUserEmail) {
@@ -76,7 +80,7 @@ const NewsPage = () => {
 
     }
 
-    return (
+    return ( 
         <div className="container">
             <div className="site-content">
                 <div className="main">
@@ -86,7 +90,7 @@ const NewsPage = () => {
                             <p className="flex-icon"><CalendarTodayIcon /> {selectedNews.date}</p>
                             <p className="flex-icon"><RateReviewIcon /> {selectedNews.category}</p>
                             <p className="flex-icon"><FavoriteIcon onClick={handleOnLike} />{like.length} </p>
-                            <p className="flex-icon"><CommentIcon /> 14</p>
+                            <p className="flex-icon"><CommentIcon />{comments.length}</p>
                         </div>
                         <h4>{selectedNews.short_desc}</h4>
                         <img src={selectedNews.coverImage} alt="" width="100%" />
@@ -97,7 +101,7 @@ const NewsPage = () => {
                             ))}
                         </div> : selectedNews.images.map(img => <img key={selectedNews.id} src={img} />)}
                     </div>
-                    <CommentsBox />
+                    <CommentsBox id={id} comments={comments} index={index} />
                 </div>
 
                 <Aside />

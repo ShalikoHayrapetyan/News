@@ -86,16 +86,7 @@ class CreateUserForm extends Component {
           userName: newUserCredentials.name,
           userEmail: newUserCredentials.email,
           role: "user",
-        }).then(() => {
-
-          /**
-           * @todo (Shaliko) figure out what's the problem
-           */
-          this.props.setisSignUp(() => false)
         })
-          .catch((error) => {
-            console.error("Error writing document: ", error);
-          });
         const user = userCredential.user;
       })
       .catch((err) => {

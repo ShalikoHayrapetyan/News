@@ -6,13 +6,10 @@ import {
   Route,
 } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-
 import AdminPage from './adminka/AdminPage'
 import LinearIndeterminate from './adminka/Loading';
-import { getAllNewsData, getAllCategoryData } from './getFunctions';
 import Main from './components/Main';
-import { fetchAllNews } from './redux/asyncNewsActions';
-
+import { fetchAllCategory, fetchAllNews } from './redux/asyncNewsActions';
 import './App.css';
 
 
@@ -43,8 +40,8 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchAllNews())
-    getAllNewsData(dispatch)
-    getAllCategoryData(dispatch)
+    dispatch(fetchAllCategory())
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
