@@ -33,10 +33,7 @@ const Main = () => {
             </Route>
             <Route path="*">
                    <Redirect to="/" />
-            </Route>
-
-            
-           
+            </Route>    
         </Switch> 
         <Footer />
         </>
