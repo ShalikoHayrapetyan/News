@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import { update } from "lodash";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import newsSvc from '../../services/newsSvc';
+import newsSvc from '../services/newsSvc';
 import { v4 as uuidv4 } from 'uuid';
 
 

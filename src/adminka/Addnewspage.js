@@ -107,7 +107,8 @@ const Addnewspage = () => {
                 date: new Date().toDateString(),
                 category: category,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                video: video 
+                video: video ,
+                comments:[]
 
             }).then(() => {
                 console.log("Document successfully written!");
