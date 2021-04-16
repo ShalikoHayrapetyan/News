@@ -50,6 +50,8 @@ const NewsPage = () => {
     const dispatch =useDispatch()
     const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200)
     let selectedNews = allNewsData.find(news => news.id === newsId)
+    if(!selectedNews) return <Redirect to="/" />
+
     let index =allNewsData.indexOf(selectedNews)
     let {like ,id,comments }=selectedNews
     const updateNews = () => {
