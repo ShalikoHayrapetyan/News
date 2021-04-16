@@ -1,10 +1,4 @@
 import React from 'react';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Addnewspage from './Addnewspage';
-import NewsListpage from './NewsListpage';
-import Categorypage from './Categorypage';
-import Editnews from './Editnews';
 import {
     Switch,
     Route,
@@ -12,13 +6,21 @@ import {
     Redirect,
 
 } from "react-router-dom";
+import Header from './Header';
+import Sidebar from './Sidebar';
+import Addnewspage from './Addnewspage';
+import NewsListpage from './NewsListpage';
+import Categorypage from './Categorypage';
+import Editnews from './Editnews';
 import AdminHomePage from './AdminHomePage';
 
 const Dashboard = () => {
     let { path } = useRouteMatch();
+    
     return (
         <>
             <Header />
+
             <div className="wrapper">
                 <Sidebar />
                 <div className="content">

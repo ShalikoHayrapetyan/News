@@ -1,17 +1,18 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: rgba(0, 0, 0, 0.87);
   font-weight: 400;
   line-height: 1.4;
   background-color: rgb(245, 242, 242);
 }
-html, body {
+html,
+body {
   width: 100%;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -31,7 +32,7 @@ html, body {
 }
 
 /* Header */
-.headerNav__top{
+.headerNav__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,20 +40,20 @@ html, body {
   padding: 10px 0;
 }
 
-.headerNav__top > a[href='/'] {
+.headerNav__top > a[href="/"] {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.87);
 }
 
 .logo {
-    margin: 0;
-    width: 170px;
+  margin: 0;
+  width: 170px;
 }
 
 .header__botom {
   display: flex;
   justify-content: space-between;
-  align-items: center;  
+  align-items: center;
   padding: 5px 0;
 }
 
@@ -60,7 +61,7 @@ html, body {
   display: flex;
 }
 
-.navBar a{
+.navBar a {
   padding: 8px 0;
   margin-right: 32px;
   font-size: 16px;
@@ -77,11 +78,10 @@ html, body {
   color: rgba(0, 0, 0, 0.54);
 }
 
-
 /* Footer */
 .footerBar {
-  background-color: #2E3339;
-  color: rgba(255, 255,255, 0.85);
+  background-color: #2e3339;
+  color: rgba(255, 255, 255, 0.85);
   padding: 40px 0;
   margin-top: 60px;
   font-weight: 400;
@@ -93,12 +93,12 @@ html, body {
   justify-content: space-between;
 }
 
-.footer-menu a{
+.footer-menu a {
   padding: 8px 0;
   margin-right: 32px;
-  font-size: 16px;  
+  font-size: 16px;
   text-decoration: none;
-  color: rgba(255, 255,255, 0.85);
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 400;
 }
 
@@ -110,10 +110,9 @@ html, body {
   font-size: 14px;
 }
 
-
 .site-content {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: flex-start;
   margin-top: 40px;
   width: 100%;
@@ -146,8 +145,8 @@ html, body {
   margin-top: 52px;
 }
 
-.aside > div{
-  border-bottom:1px solid #ccc;
+.aside > div {
+  border-bottom: 1px solid #ccc;
   margin-bottom: 15px;
 }
 
@@ -165,8 +164,8 @@ html, body {
 }
 
 .link-new:hover {
-  color:#3f51b5;
-} 
+  color: #3f51b5;
+}
 
 .aside__banner {
   max-width: 100%;
@@ -180,7 +179,7 @@ html, body {
   margin-bottom: 30px;
   width: 30%;
 }
-.article .MuiCardHeader-title{
+.article .MuiCardHeader-title {
   max-height: 52px;
   overflow: hidden;
 
@@ -189,7 +188,7 @@ html, body {
   -webkit-box-orient: vertical;
 }
 
-.article .MuiTypography-h5{
+.article .MuiTypography-h5 {
   font-size: 20px;
 }
 
@@ -202,7 +201,7 @@ html, body {
   margin-right: 35px;
 }
 
-.flex-icon svg{
+.flex-icon svg {
   margin-right: 5px;
 }
 
@@ -225,13 +224,13 @@ html, body {
 }
 
 @media (max-width: 1140px) {
-  .article { 
+  .article {
     width: 30%;
   }
 }
 
 @media (max-width: 991px) {
-  .article { 
+  .article {
     width: 45%;
   }
 }
@@ -251,7 +250,7 @@ html, body {
     display: none;
   }
   .article,
-  .main_categories .article { 
+  .main_categories .article {
     width: 48%;
   }
 
@@ -279,12 +278,11 @@ html, body {
     display: flex;
     margin-bottom: 40px;
   }
-
 }
 
-@media (max-width: 570px) { 
+@media (max-width: 570px) {
   .article,
-  .main_categories .article { 
+  .main_categories .article {
     width: 100%;
     margin-right: 0;
     margin-bottom: 12px;
@@ -307,19 +305,22 @@ html, body {
   }
 }
 
-.asideTexts{
+.user-name {
+  color: #3f51b5;
+}
+.asideTexts {
   word-wrap: break-word;
   margin-bottom: 10px;
 }
-.category-title{
+.category-title {
   font-size: 30px;
   margin-bottom: 10px;
-  color:#3f51b5;
+  color: #3f51b5;
   width: 100%;
 }
-.closeBtn{
- font-size: 22px;
- cursor: pointer;
- align-self: flex-end;
- margin-right: 15px;
+.closeBtn {
+  font-size: 22px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-right: 15px;
 }
