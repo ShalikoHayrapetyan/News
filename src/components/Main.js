@@ -7,10 +7,6 @@ import HomePage from "./HomePage";
 import NewsPage from "./NewsPage";
 
 const Main = () => {
-  const categoriesData = useSelector(
-    (state) => state.fireBaseData.categoryData
-  );
-
   return (
     <>
       <Header />
