@@ -29,9 +29,14 @@ const useStyles = makeStyles((theme) => ({
         width: "98%",
         height: 220,
     },
-    img: {
-        height: "100%",
-        objectFit: 'contain'
+    wrap_imgs: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between'
+    },
+    imgs: {
+        width: "47%",
     }
 }));
 
@@ -41,6 +46,7 @@ const NewsPage = () => {
     let {newsId}=useParams()
     const allNewsData = useSelector(state => state.fireBaseData.allNewsData);
     const localUserEmail = useSelector(state => state.authReducer.adminEmail);
+
     const dispatch =useDispatch()
     const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200)
     let selectedNews = allNewsData.find(news => news.id === newsId)
@@ -49,28 +55,30 @@ const NewsPage = () => {
     const updateNews = () => {
         let newData=[...allNewsData]
         newData[index]={...selectedNews , like }
+
         dispatch({
             type: 'likesData',
             payload: {
-              data: newData
+                data: newData
             }
+
           });
           updateNewsLikedStatus(id, like);
 
     }
-    const handleOnLike = () =>{
-        if(localUserEmail){
-           if(like.includes(localUserEmail)  ) {
-                   like =like.filter(name => name!==localUserEmail)
+    const handleOnLike = () => {
+        if (localUserEmail) {
+            if (like.includes(localUserEmail)) {
+                like = like.filter(name => name !== localUserEmail)
 
-                   }else{ 
-                       like=[...like ,localUserEmail]
-                   
-                   }
-                   updateNews()
-        }else alert("Pleasa Sign in or Sign Up")
-      
-   }
+            } else {
+                like = [...like, localUserEmail]
+
+            }
+            updateNews()
+        } else alert("Pleasa Sign in or Sign Up")
+
+    }
 
     return ( 
         <div className="container">
@@ -87,14 +95,10 @@ const NewsPage = () => {
                         <h4>{selectedNews.short_desc}</h4>
                         <img src={selectedNews.coverImage} alt="" width="100%" />
                         <p>{selectedNews.desc}</p>
-                        {selectedNews.images.length > 2 ? <div className={classes.root}>
-                            <GridList cellHeight={160} className={classes.gridList} cols={3}>
-                                {selectedNews.images.map((img, index, arr) => (
-                                    <GridListTile key={uuidv4()} cols={1}>
-                                        <img className={classes.img} src={img} alt={selectedNews.title} />
-                                    </GridListTile>
-                                ))}
-                            </GridList>
+                        {selectedNews.images.length > 2 ? <div className={classes.wrap_imgs}>
+                            {selectedNews.images.map((img, index, arr) => (
+                                <img key={uuidv4()} className={classes.imgs} src={img} alt={selectedNews.title} />
+                            ))}
                         </div> : selectedNews.images.map(img => <img key={selectedNews.id} src={img} />)}
                     </div>
                     <CommentsBox id={id} comments={comments} index={index} />

@@ -92,7 +92,9 @@ const PostItem = (props) => {
         <div className="article">
 
             <Card className={classes.root}>
-                <Link to={`/news/${id}`} >
+
+                <Link to={`/news/${id}`} className="link-new">
+
                     <CardHeader
                         title={title}
                         subheader={date}
