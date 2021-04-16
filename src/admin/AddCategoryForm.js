@@ -2,10 +2,9 @@ import { useState } from "react"
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import { db } from "../App";
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,13 +59,9 @@ const AddCategoryForm = () => {
                  onClick={addNewCategory}
                  >
                     Add
-      </Button>
+                </Button>
             </div>
-
         </>
-
-
-
     )
 }
 

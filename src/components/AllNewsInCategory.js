@@ -8,7 +8,7 @@ const AllNewsInCategory = () => {
   const allNewsData = useSelector((state) => state.fireBaseData.allNewsData);
   const [paging, setPaging] = useState({
     current: 0,
-    countPerPage: 12,
+    countPerPage: 16,
   });
   let catTitle = useLocation().pathname.substring(1);
 
@@ -28,7 +28,7 @@ const AllNewsInCategory = () => {
     return allNewsData.filter((el) => {
       if (catTitle === "" || catTitle === "News") return true;
 
-      return el.category == catTitle;
+      return el.category === catTitle;
     });
   }, [allNewsData, catTitle]);
 
@@ -48,16 +48,24 @@ const AllNewsInCategory = () => {
             visibleNews.map((news) => <PostItem key={news.id} news={news} />)}
         </div>
       </div>
-      {allFilteredNews.length > 0 && (
-        <TablePagination
-          rowsPerPageOptions={[8, 12, 16, 24]}
-          onChangeRowsPerPage={changeRowsPerPage}
-          onChangePage={changePage}
-          rowsPerPage={paging.countPerPage}
-          count={allFilteredNews.length}
-          page={paging.current}
-        />
-      )}
+      <div className="container ">
+        {allFilteredNews.length > paging.countPerPage && (
+          <table style={{ margin: "0 auto" }}>
+            <tbody>
+              <tr>
+                <TablePagination
+                  rowsPerPageOptions={[16]}
+                  onChangeRowsPerPage={changeRowsPerPage}
+                  onChangePage={changePage}
+                  rowsPerPage={paging.countPerPage}
+                  count={allFilteredNews.length}
+                  page={paging.current}
+                />
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
     </>
   );
 };

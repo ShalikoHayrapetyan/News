@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { register } from "./../RegistrationStyles";
+import { register } from "../RegistrationStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
@@ -12,101 +12,81 @@ import ErrorIcon from "@material-ui/icons/Error";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import VisibilityOffTwoToneIcon from "@material-ui/icons/VisibilityOffTwoTone";
 import CloseIcon from "@material-ui/icons/Close";
-import { auth, db } from "../../App";
+import { auth } from "../../App";
 import { connect } from "react-redux";
 
 class CreateUserForm extends Component {
-
   state = {
-    name : "",
     email: "",
     password: "",
     passwordConfrim: "",
     hidePassword: true,
     error: "",
-    errorOpen: false
+    errorOpen: false,
   };
 
-  errorClose = e => {
+  errorClose = (e) => {
     this.setState({
-      errorOpen: false
+      errorOpen: false,
     });
   };
 
-  handleChange = text => e => {
+  handleChange = (name) => (e) => {
     this.setState({
-      [text]: e.target.value
+      [name]: e.target.value,
     });
   };
 
-
-  passwordMatch = () => this.state.password === this.state.passwordConfrim;
   validateEmail = (email) => {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
+    var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    return mailformat.test(String(email).toLowerCase());
+  };
 
   showPassword = () => {
-    this.setState(prevState => ({ hidePassword: !prevState.hidePassword }));
+    this.setState((prevState) => ({ hidePassword: !prevState.hidePassword }));
   };
 
   isValid = () => {
-    if (this.state.email === "" || this.state.name === "" ) {
+    if (this.state.email === "") {
       return false;
     }
     return true;
   };
-  submitRegistration = e => {
+
+  submitRegistration = (e) => {
     e.preventDefault();
     if (!this.validateEmail(this.state.email)) {
       this.setState({
         errorOpen: true,
-        error: "Wrong Email addres"
+        error: "Wrong Email addres",
       });
-      return
+      return;
     }
 
-    if (!this.passwordMatch()) {
-      this.setState({
-        errorOpen: true,
-        error: "Passwords don't match"
+    auth
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((userCredential) => {})
+      .catch((error) => {
+        console.log(error.message);
       });
-      return
-    }
-    const newUserCredentials = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      passwordConfrim: this.state.passwordConfrim
-    };
-
-    auth.createUserWithEmailAndPassword(newUserCredentials.email, newUserCredentials.password)
-      .then((userCredential) => {
-        db.collection("users").doc(userCredential.user.uid).set({
-          userName: newUserCredentials.name,
-          userEmail: newUserCredentials.email,
-          role: "user",
-        })
-        const user = userCredential.user;
-      })
-      .catch((err) => {
-        let errorCode = err.code;
-        let errorMessage = err.message;
-        console.log(errorMessage)
-      });
-
-
   };
 
   render() {
     const { classes } = this.props;
+
     return (
-      <div className={classes.main} >
+      <div className={classes.main}>
         <CssBaseline />
 
         <Paper className={classes.paper}>
-          <div className='closeBtn' onClick={() => this.props.setisSignUp(false)} >X</div>
-          <h2>Sign Up</h2>
+          <div
+            className="closeBtn"
+            onClick={() => this.props.setisSignIn(false)}
+          >
+            X
+          </div>
+          <h2>Sign in</h2>
+
           <form
             className={classes.form}
             onSubmit={() => this.submitRegistration}
@@ -122,19 +102,6 @@ class CreateUserForm extends Component {
                 className={classes.inputs}
                 disableUnderline={true}
                 onChange={this.handleChange("email")}
-              />
-            </FormControl>
-            <FormControl required fullWidth margin="normal">
-              <InputLabel htmlFor="email" className={classes.labels}>
-                name
-              </InputLabel>
-              <Input
-                name="name"
-                type="text"
-                autoComplete="name"
-                className={classes.inputs}
-                disableUnderline={true}
-                onChange={this.handleChange("name")}
               />
             </FormControl>
 
@@ -171,39 +138,6 @@ class CreateUserForm extends Component {
               />
             </FormControl>
 
-            <FormControl required fullWidth margin="normal">
-              <InputLabel htmlFor="passwordConfrim" className={classes.labels}>
-                confrim password
-              </InputLabel>
-              <Input
-                name="passwordConfrim"
-                autoComplete="passwordConfrim"
-                className={classes.inputs}
-                disableUnderline={true}
-                onClick={this.state.showPassword}
-                onChange={this.handleChange("passwordConfrim")}
-                type={this.state.hidePassword ? "password" : "input"}
-                endAdornment={
-                  this.state.hidePassword ? (
-                    <InputAdornment position="end">
-                      <VisibilityOffTwoToneIcon
-                        fontSize="default"
-                        className={classes.passwordEye}
-                        onClick={this.showPassword}
-                      />
-                    </InputAdornment>
-                  ) : (
-                    <InputAdornment position="end">
-                      <VisibilityTwoToneIcon
-                        fontSize="default"
-                        className={classes.passwordEye}
-                        onClick={this.showPassword}
-                      />
-                    </InputAdornment>
-                  )
-                }
-              />
-            </FormControl>
             <Button
               disabled={!this.isValid()}
               disableRipple
@@ -213,7 +147,7 @@ class CreateUserForm extends Component {
               type="submit"
               onClick={this.submitRegistration}
             >
-              Sign Up
+              Sign in
             </Button>
           </form>
 
@@ -223,7 +157,7 @@ class CreateUserForm extends Component {
               key={this.state.error}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "center"
+                horizontal: "center",
               }}
               open={this.state.errorOpen}
               onClose={this.errorClose}
@@ -246,7 +180,7 @@ class CreateUserForm extends Component {
                     onClick={this.errorClose}
                   >
                     <CloseIcon color="error" />
-                  </IconButton>
+                  </IconButton>,
                 ]}
               />
             </Snackbar>

@@ -8,6 +8,7 @@ import Dashboard from './Dashboard';
 
 function AdminPage() {
   const localAdminRole = useSelector(state => state.authReducer.role);
+
   return (
     <div>
       {localAdminRole === "admin" ? <Dashboard /> : <AdminSignIn />}

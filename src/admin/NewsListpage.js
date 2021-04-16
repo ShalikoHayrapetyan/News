@@ -19,7 +19,6 @@ import LinearIndeterminate from "./Loading";
 
 const useStyles = makeStyles({
   root: {
-    //maxWidth: 345,
     flex: "0 0 230px",
     margin: "0 14px 20px 0",
     position: "relative",
@@ -50,7 +49,7 @@ const NewsListpage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [paging, setPaging] = useState({
     current: 0,
-    countPerPage: 12,
+    countPerPage: 24,
   });
   const [category, setCategory] = useState("");
   const [allCategoriesData, setallCategoriesData] = useState([]);
@@ -80,7 +79,6 @@ const NewsListpage = () => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
           all.push(doc.data());
         });
         setallNewsData(all.reverse());
@@ -89,7 +87,7 @@ const NewsListpage = () => {
         console.log("Error getting documents: ", error);
       })
       .finally(() => setIsLoading(false));
-  }, [isDeleting]);
+  }, [isDeleting, isUnmounted]);
 
   const delNewsInDb = (id) => {
     db.collection("news")
@@ -126,7 +124,7 @@ const NewsListpage = () => {
 
     return allNewsData.filter((el) => {
       if (category === "") return true;
-      return el.category == category;
+      return el.category === category;
     });
   }, [allNewsData, category]);
 
@@ -186,9 +184,6 @@ const NewsListpage = () => {
                     <Typography gutterBottom variant="h5" component="h2">
                       {el.title}
                     </Typography>
-                    {/*<Typography variant="body2" color="textSecondary" component="p">
-                                        {el.short_desc}
-                                    </Typography>*/}
                   </CardContent>
                 </CardActionArea>
                 <CardActions className={classes.btnDiv}>
@@ -214,15 +209,21 @@ const NewsListpage = () => {
           <LinearIndeterminate />
         )}
       </div>
-      {allFilteredNews.length > 0 && (
-        <TablePagination
-          rowsPerPageOptions={[8, 12, 16, 24]}
-          onChangeRowsPerPage={changeRowsPerPage}
-          onChangePage={changePage}
-          rowsPerPage={paging.countPerPage}
-          count={allFilteredNews.length}
-          page={paging.current}
-        />
+      {allFilteredNews.length > paging.countPerPage && (
+        <table>
+          <tbody>
+            <tr>
+              <TablePagination
+                rowsPerPageOptions={[24]}
+                onChangeRowsPerPage={changeRowsPerPage}
+                onChangePage={changePage}
+                rowsPerPage={paging.countPerPage}
+                count={allFilteredNews.length}
+                page={paging.current}
+              />
+            </tr>
+          </tbody>
+        </table>
       )}
     </>
   );
