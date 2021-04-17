@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce } from "lodash";
 import newsSvc from "../services/newsSvc";
+import UserSignInForm from "../admin/forms/UserSignInForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +49,11 @@ const useStyles = makeStyles((theme) => ({
 const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200);
 
 const PostItem = (props) => {
-  let { title, short_desc, coverImage, like, date, id,comments } = props.news;
+  const classes = useStyles();
+
+  let { title, short_desc, coverImage, like, date, id, comments } = props.news;
+  const [isSignIn, setisSignIn] = useState(false);
+
   if (!coverImage.length) {
     coverImage =
       "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg";
@@ -56,7 +61,6 @@ const PostItem = (props) => {
   const localUserEmail = useSelector((state) => state.authReducer.adminEmail);
   const allNewsData = useSelector((state) => state.fireBaseData.allNewsData);
   const dispatch = useDispatch();
-  const classes = useStyles();
 
   const updateNews = () => {
     let index = allNewsData.indexOf(props.news);
@@ -80,11 +84,13 @@ const PostItem = (props) => {
         like = [...like, localUserEmail];
       }
       updateNews();
-    } else alert("Pleasa Sign in or Sign Up");
+    } else setisSignIn(true);
   };
 
   return (
     <div className="article">
+      {isSignIn ? <UserSignInForm setisSignIn={setisSignIn} /> : ""}
+
       <Card className={classes.root}>
         <Link to={`/news/${id}`} className="link-new">
           <CardHeader title={title} subheader={date} />
@@ -110,7 +116,8 @@ const PostItem = (props) => {
             {like.length}
           </IconButton>
           <IconButton aria-label="comments" className={classes.icons}>
-            <CommentIcon className={classes.iconSVg} />{comments.length}
+            <CommentIcon className={classes.iconSVg} />
+            {comments.length}
           </IconButton>
         </CardActions>
       </Card>
