@@ -13,6 +13,7 @@ import { useHistory } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ReactPlayer from "react-player";
+import newsSvc from "../services/newsSvc";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,9 +58,7 @@ const Editnews = () => {
   let history = useHistory();
 
   useEffect(() => {
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
+    newsSvc.getAllCategoryData().then((querySnapshot) => {
         const all = [];
         querySnapshot.forEach((doc) => {
           all.push(doc.data());
@@ -100,6 +99,7 @@ const Editnews = () => {
         category,
         coverImage,
         images,
+        video,
       })
       .then(() => {
         history.push(`/admin/newsList`);
@@ -149,7 +149,7 @@ const Editnews = () => {
 
   const imagesList = (imgs) => {
     return imgs.map((itemSrc, i) => (
-      <span>
+      <span key={uuidv4()}>
         <IconButton
           onClick={() => removeImg(i)}
           aria-label="delete"
@@ -157,7 +157,7 @@ const Editnews = () => {
         >
           <DeleteIcon />
         </IconButton>
-        <img width="200" src={itemSrc} key={uuidv4()} alt="" />
+        <img width="200" src={itemSrc}  alt="" />
       </span>
     ));
   };
@@ -214,7 +214,7 @@ const Editnews = () => {
       <TextField
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        id="outlined-full-width"
+        id="outlined-full-width-2"
         label="Title"
         style={{ margin: 15 }}
         fullWidth
@@ -306,7 +306,7 @@ const Editnews = () => {
           }}
           variant="outlined"
         />
-        {video.length > 0 && <ReactPlayer url={video} />}
+        {video &&video.length > 0 && <ReactPlayer url={video} />}
       </div>
       <div className="save-btn">
         <Button

@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import Header from "./Header";
 import AllNewsInCategory from "./AllNewsInCategory";

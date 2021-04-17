@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Redirect, Route, Switch, useLocation, useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import PostItem from "./PostItem";
 import TablePagination from "@material-ui/core/TablePagination";

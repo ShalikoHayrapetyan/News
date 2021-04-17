@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const updateNewsLikedStatus = debounce(newsSvc.updateLikedState, 200);
 
 const PostItem = (props) => {
-  let { title, short_desc, coverImage, like, date, id } = props.news;
+  let { title, short_desc, coverImage, like, date, id,comments } = props.news;
   if (!coverImage.length) {
     coverImage =
       "https://static5.depositphotos.com/1006069/438/i/600/depositphotos_4381120-stock-photo-news.jpg";
@@ -110,7 +110,7 @@ const PostItem = (props) => {
             {like.length}
           </IconButton>
           <IconButton aria-label="comments" className={classes.icons}>
-            <CommentIcon className={classes.iconSVg} />7
+            <CommentIcon className={classes.iconSVg} />{comments.length}
           </IconButton>
         </CardActions>
       </Card>

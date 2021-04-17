@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import LinearIndeterminate from "./Loading";
+import newsSvc from "../services/newsSvc";
 
 const useStyles = makeStyles({
   root: {
@@ -58,9 +59,7 @@ const NewsListpage = () => {
   useEffect(() => () => setIsUnmounted(true), []);
 
   useEffect(() => {
-    db.collection("categories")
-      .get()
-      .then((querySnapshot) => {
+    newsSvc.getAllCategoryData().then((querySnapshot) => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
@@ -72,10 +71,7 @@ const NewsListpage = () => {
         console.log("Error getting documents: ", error);
       });
     setIsLoading(true);
-    db.collection("news")
-      .orderBy("timestamp")
-      .get()
-      .then((querySnapshot) => {
+    newsSvc.getAllNewsData().then((querySnapshot) => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
