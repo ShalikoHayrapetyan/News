@@ -1,15 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from "../App"
+
 const Header = () => {
     const localAdminEmail = useSelector(state => state.authReducer.adminEmail);
     const dispatch = useDispatch();
+
     const handleLogout = () => {
         auth.signOut()
         dispatch({
             type: 'signOut',
         });
-
     }
 
     return (

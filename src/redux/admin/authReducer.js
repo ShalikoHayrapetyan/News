@@ -1,9 +1,9 @@
 const initialState = {
-    
-        adminEmail: null,
-        role:null
- 
 
+        adminEmail: null,
+        adminName: null,
+        role:null,
+        isAuthenticating: false
 }
 
 const authReducer = (state = initialState, action) => {
@@ -11,13 +11,21 @@ const authReducer = (state = initialState, action) => {
         case "signIn":
             return {
                 adminEmail:action.payload.adminEmail,
-                role:action.payload.role
+                adminName:action.payload.adminName,
+                role:action.payload.role,
+
             };
             case "signOut":
                 return {
                     adminEmail:null,
-                    role:null
+                    role:null,
+                    
                 };
+                case "isAuthenticating":
+                    return {
+                       ...state,
+                       isAuthenticating:action.payload
+                    };
         default:
             return state
 
