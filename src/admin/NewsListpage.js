@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-const NewsListpage = () => {
+const NewsListPage = () => {
   let history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -59,7 +59,9 @@ const NewsListpage = () => {
   useEffect(() => () => setIsUnmounted(true), []);
 
   useEffect(() => {
-    newsSvc.getAllCategoryData().then((querySnapshot) => {
+    newsSvc
+      .getAllCategoryData()
+      .then((querySnapshot) => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
@@ -71,7 +73,9 @@ const NewsListpage = () => {
         console.log("Error getting documents: ", error);
       });
     setIsLoading(true);
-    newsSvc.getAllNewsData().then((querySnapshot) => {
+    newsSvc
+      .getAllNewsData()
+      .then((querySnapshot) => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
@@ -97,7 +101,7 @@ const NewsListpage = () => {
       });
   };
   const startEdit = (id) => {
-    history.push(`/admin/editNews`);
+    history.push(`/admin/EditNews`);
     dispatch({
       type: "editingNews",
       payload: {
@@ -225,4 +229,4 @@ const NewsListpage = () => {
   );
 };
 
-export default NewsListpage;
+export default NewsListPage;

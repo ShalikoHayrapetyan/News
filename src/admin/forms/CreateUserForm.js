@@ -49,8 +49,13 @@ class CreateUserForm extends Component {
     this.setState((prevState) => ({ hidePassword: !prevState.hidePassword }));
   };
 
-  isValid = () => {
-    if (this.state.email === "" || this.state.name === "") {
+  isDisable = () => {
+    if (
+      this.state.email === "" ||
+      this.state.name === "" ||
+      this.state.password === "" ||
+      this.state.passwordConfrim === ""
+    ) {
       return false;
     }
     return true;
@@ -62,7 +67,22 @@ class CreateUserForm extends Component {
     if (!this.validateEmail(this.state.email)) {
       this.setState({
         errorOpen: true,
-        error: "Wrong Email addres",
+        error: "Please enter a valid email adress ",
+      });
+      return;
+    }
+
+    if (this.state.name.length < 3) {
+      this.setState({
+        errorOpen: true,
+        error: "Name must be more then 2 chars",
+      });
+      return;
+    }
+    if (this.state.password.length < 6) {
+      this.setState({
+        errorOpen: true,
+        error: "Password must be more then 6 chars",
       });
       return;
     }
@@ -74,6 +94,7 @@ class CreateUserForm extends Component {
       });
       return;
     }
+
     const newUserCredentials = {
       name: this.state.name,
       email: this.state.email,
@@ -94,7 +115,10 @@ class CreateUserForm extends Component {
         });
       })
       .catch((err) => {
-        console.log(err.message);
+        this.setState({
+          errorOpen: true,
+          error: "This email already exist",
+        });
       });
   };
 
@@ -212,7 +236,7 @@ class CreateUserForm extends Component {
               />
             </FormControl>
             <Button
-              disabled={!this.isValid()}
+              disabled={!this.isDisable()}
               disableRipple
               fullWidth
               variant="outlined"

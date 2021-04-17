@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Categorypage = () => {
+const CategoryPage = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const dense = false;
@@ -51,7 +51,9 @@ const Categorypage = () => {
 
   useEffect(() => {
     setIsLoding(true);
-    newsSvc.getAllCategoryData().then((querySnapshot) => {
+    newsSvc
+      .getAllCategoryData()
+      .then((querySnapshot) => {
         if (isUnmounted) return;
         const all = [];
         querySnapshot.forEach((doc) => {
@@ -59,14 +61,8 @@ const Categorypage = () => {
         });
         setallCategoriesData(all);
       })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      })
+      .catch((error) => {})
       .finally(() => setIsLoding(false));
-
-    return () => {
-      console.log("aborting...");
-    };
   }, [isEditing, categoryState, isDeleting, isUnmounted]);
 
   const editCategoryNameSaveBtn = (id) => {
@@ -191,4 +187,4 @@ const Categorypage = () => {
   );
 };
 
-export default Categorypage;
+export default CategoryPage;

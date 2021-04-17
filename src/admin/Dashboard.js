@@ -1,51 +1,45 @@
-import React from 'react';
-import {
-    Switch,
-    Route,
-    useRouteMatch,
-    Redirect,
-
-} from "react-router-dom";
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Addnewspage from './Addnewspage';
-import NewsListpage from './NewsListpage';
-import Categorypage from './Categorypage';
-import Editnews from './Editnews';
-import AdminHomePage from './AdminHomePage';
+import React from "react";
+import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import AddNewsPage from "./AddNewsPage";
+import NewsListPage from "./NewsListPage";
+import CategoryPage from "./CategoryPage";
+import EditNews from "./EditNews";
+import AdminHomePage from "./AdminHomePage";
 
 const Dashboard = () => {
-    let { path } = useRouteMatch();
-    
-    return (
-        <>
-            <Header />
+  let { path } = useRouteMatch();
 
-            <div className="wrapper">
-                <Sidebar />
-                <div className="content">
-                    <Switch>
-                        <Route exact path={path}>
-                            <AdminHomePage />
-                        </Route>
-                        <Route path={`${path}/addNews`}>
-                            <Addnewspage />
-                        </Route>
-                        <Route path={`${path}/newsList`}>
-                            <NewsListpage />
-                        </Route>
-                        <Route path={`${path}/editNews`}>
-                            <Editnews />
-                        </Route>
-                        <Route path={`${path}/newsCategories`}>
-                            <Categorypage />
-                        </Route>
-                        <Redirect to="/admin" />
-                    </Switch>
-                </div>
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <Header />
+
+      <div className="wrapper">
+        <Sidebar />
+        <div className="content">
+          <Switch>
+            <Route exact path={path}>
+              <AdminHomePage />
+            </Route>
+            <Route path={`${path}/addNews`}>
+              <AddNewsPage />
+            </Route>
+            <Route path={`${path}/newsList`}>
+              <NewsListPage />
+            </Route>
+            <Route path={`${path}/EditNews`}>
+              <EditNews />
+            </Route>
+            <Route path={`${path}/newsCategories`}>
+              <CategoryPage />
+            </Route>
+            <Redirect to="/admin" />
+          </Switch>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default Dashboard;

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Link from "@material-ui/core/Link";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,21 +11,9 @@ import LinearIndeterminate from "./../Loading";
 import { Redirect } from "react-router";
 import { Switch } from "react-router-dom";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: 300,
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
@@ -43,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  inputs: {
+    display: "block",
+    width: "100%",
+    height: "38px",
+    marginBottom: "8px",
   },
 }));
 
@@ -81,7 +73,6 @@ export default function AdminSignIn() {
         });
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
         setError("Wrong email or password!!!");
       });
   };
@@ -100,6 +91,7 @@ export default function AdminSignIn() {
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSignInAdmin}>
           <input
+            className={classes.inputs}
             value={login}
             onChange={(e) => setLogin(e.target.value)}
             type="text"
@@ -107,6 +99,7 @@ export default function AdminSignIn() {
           />
           <input
             value={password}
+            className={classes.inputs}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
@@ -124,9 +117,6 @@ export default function AdminSignIn() {
           {error && <span>{error}</span>}
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
 
       <Switch>
         <Redirect to="/admin" />

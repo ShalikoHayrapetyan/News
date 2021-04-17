@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Addnewspage = () => {
+const AddNewsPage = () => {
   let history = useHistory();
   const classes = useStyles();
   const [isUnmounted, setIsUnmounted] = useState(false);
@@ -364,4 +364,4 @@ const Addnewspage = () => {
   );
 };
 
-export default Addnewspage;
+export default AddNewsPage;

@@ -43,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Editnews = () => {
-  const { editNewsId } = useSelector((state) => state.pages);
+const EditNews = () => {
+  const { EditNewsId } = useSelector((state) => state.pages);
   const classes = useStyles();
   const [data, setData] = useState({});
   const [title, setTitle] = useState("");
@@ -58,7 +58,9 @@ const Editnews = () => {
   let history = useHistory();
 
   useEffect(() => {
-    newsSvc.getAllCategoryData().then((querySnapshot) => {
+    newsSvc
+      .getAllCategoryData()
+      .then((querySnapshot) => {
         const all = [];
         querySnapshot.forEach((doc) => {
           all.push(doc.data());
@@ -70,7 +72,7 @@ const Editnews = () => {
       });
 
     db.collection("news")
-      .where("id", "==", editNewsId)
+      .where("id", "==", EditNewsId)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -87,7 +89,7 @@ const Editnews = () => {
       .catch((error) => {
         console.log("Error getting documents: ", error);
       });
-  }, [editNewsId]);
+  }, [EditNewsId]);
 
   const updateNews = () => {
     const washingtonRef = db.collection("news").doc(data.id);
@@ -157,7 +159,7 @@ const Editnews = () => {
         >
           <DeleteIcon />
         </IconButton>
-        <img width="200" src={itemSrc}  alt="" />
+        <img width="200" src={itemSrc} alt="" />
       </span>
     ));
   };
@@ -306,7 +308,7 @@ const Editnews = () => {
           }}
           variant="outlined"
         />
-        {video &&video.length > 0 && <ReactPlayer url={video} />}
+        {video && video.length > 0 && <ReactPlayer url={video} />}
       </div>
       <div className="save-btn">
         <Button
@@ -324,4 +326,4 @@ const Editnews = () => {
   );
 };
 
-export default Editnews;
+export default EditNews;

@@ -4,11 +4,15 @@ import AllNewsInCategory from "./AllNewsInCategory";
 import Footer from "./Footer";
 import HomePage from "./HomePage";
 import NewsPage from "./NewsPage";
+import Clock from "./Clock";
 
 const Main = () => {
   return (
     <>
       <Header />
+      <div className="clock">
+        <Clock />
+      </div>
       <Switch>
         <Route exact path="/">
           <HomePage />

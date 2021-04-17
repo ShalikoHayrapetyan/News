@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
@@ -27,18 +27,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const [isSignIn, setisSignIn] = useState(false);
   const [isSignUp, setisSignUp] = useState(false);
-  const [date, setDate] = useState(new Date());
   const localUserName = useSelector((state) => state.authReducer.adminName);
   const categoriesData = useSelector(
     (state) => state.fireBaseData.categoryData
   );
-
-  useEffect(() => {
-    const timer = setInterval(() => setDate(new Date()), 1000);
-    return function cleanup() {
-      clearInterval(timer);
-    };
-  });
 
   const handleLogout = () => {
     dispatch({
@@ -110,7 +102,6 @@ const Header = () => {
               </Link>
             ))}
           </nav>
-          <div className="date">{date.toLocaleTimeString()}</div>
         </div>
       </div>
     </div>

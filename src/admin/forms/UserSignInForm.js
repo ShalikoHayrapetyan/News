@@ -69,7 +69,10 @@ class UserSignInForm extends Component {
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((userCredential) => {})
       .catch((error) => {
-        console.log(error.message);
+        this.setState({
+          errorOpen: true,
+          error: "Wrong Password or Email",
+        });
       });
   };
 

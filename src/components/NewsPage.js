@@ -115,9 +115,23 @@ const NewsPage = () => {
               </div>
             ) : (
               selectedNews.images.map((img) => (
-                <img key={selectedNews.id} src={img} alt="" />
+                <img  key={uuidv4()} src={img} alt="" />
               ))
             )}
+            {selectedNews.video && 
+          <iframe
+            width="560"
+            height="315"
+            src={selectedNews.video}
+            title="YouTube video player"
+            frameBorder="0"
+           allow="accelerometer;
+              autoplay; clipboard-write;
+              encrypted-media; 
+              gyroscope; picture-in-picture"
+                >
+                </iframe>}
+
 
             <CommentsBox id={id} comments={comments} index={index} />
           </div>

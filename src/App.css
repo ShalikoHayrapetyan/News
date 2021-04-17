@@ -49,6 +49,10 @@ body {
   margin: 0;
   width: 170px;
 }
+.clock {
+  text-align: right;
+  margin-right: 55px;
+}
 
 .header__botom {
   display: flex;
