@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import CommentIcon from "@material-ui/icons/Comment";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import newsSvc from "../services/newsSvc";
 import { debounce } from "lodash";
 import CommentsBox from "./CommentsBox";
+import UserSignInForm from "../admin/forms/UserSignInForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const NewsPage = () => {
   const classes = useStyles();
 
+  const [isSignIn, setisSignIn] = useState(false);
   let { newsId } = useParams();
   const allNewsData = useSelector((state) => state.fireBaseData.allNewsData);
   const localUserEmail = useSelector((state) => state.authReducer.adminEmail);
@@ -70,11 +72,13 @@ const NewsPage = () => {
         like = [...like, localUserEmail];
       }
       updateNews();
-    } else alert("Pleasa Sign in or Sign Up");
+    } else setisSignIn(true);
   };
 
   return (
     <div className="container">
+      {isSignIn ? <UserSignInForm setisSignIn={setisSignIn} /> : ""}
+
       <div className="site-content">
         <div className="main">
           <div className="article-body">

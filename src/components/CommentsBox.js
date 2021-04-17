@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import newsSvc from "../services/newsSvc";
 import { v4 as uuidv4 } from "uuid";
+import UserSignInForm from "../admin/forms/UserSignInForm";
 
 const useStyles = makeStyles((theme) => ({
   contain: {
@@ -82,8 +83,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CommentsBox = (props) => {
-  const { id, comments, index } = props;
   const classes = useStyles();
+
+  const { id, comments, index } = props;
+  const [isSignIn, setisSignIn] = useState(false);
   const dispatch = useDispatch();
   const [text, setText] = useState("");
   const localUserName = useSelector((state) => state.authReducer.adminName);
@@ -121,11 +124,13 @@ const CommentsBox = (props) => {
         newsSvc.updateCommentsData(id, commentsData);
         setText("");
       }
-    } else alert("Please Sign in or Sign up");
+    } else setisSignIn(true);
   };
 
   return (
     <div className={classes.contain}>
+      {isSignIn ? <UserSignInForm setisSignIn={setisSignIn} /> : ""}
+
       <div className={classes.comment_form}>
         <textarea
           value={text}
@@ -134,7 +139,7 @@ const CommentsBox = (props) => {
           placeholder="Comments text"
         />
         <button onClick={handleOnBtn} className={classes.send_btn}>
-          Send
+          Add comment
         </button>
       </div>
       {comments.length

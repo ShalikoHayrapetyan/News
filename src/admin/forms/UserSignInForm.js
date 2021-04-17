@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { register } from "../RegistrationStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -13,9 +14,9 @@ import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import VisibilityOffTwoToneIcon from "@material-ui/icons/VisibilityOffTwoTone";
 import CloseIcon from "@material-ui/icons/Close";
 import { auth } from "../../App";
-import { connect } from "react-redux";
+import CreateUserForm from "./CreateUserForm";
 
-class CreateUserForm extends Component {
+class UserSignInForm extends Component {
   state = {
     email: "",
     password: "",
@@ -23,6 +24,7 @@ class CreateUserForm extends Component {
     hidePassword: true,
     error: "",
     errorOpen: false,
+    setSignUp: false,
   };
 
   errorClose = (e) => {
@@ -74,7 +76,9 @@ class CreateUserForm extends Component {
   render() {
     const { classes } = this.props;
 
-    return (
+    return this.state.setSignUp ? (
+      <CreateUserForm setisSignUp={this.props.setisSignIn} />
+    ) : (
       <div className={classes.main}>
         <CssBaseline />
 
@@ -149,6 +153,20 @@ class CreateUserForm extends Component {
             >
               Sign in
             </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              className={classes.button}
+              type="submit"
+              onClick={() =>
+                this.setState({
+                  setSignUp: true,
+                })
+              }
+            >
+              Sign Up
+            </Button>
           </form>
 
           {this.state.error ? (
@@ -191,4 +209,4 @@ class CreateUserForm extends Component {
   }
 }
 
-export default connect()(withStyles(register)(CreateUserForm));
+export default connect()(withStyles(register)(UserSignInForm));

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import firebase from "firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 import AdminPage from "./admin/AdminPage";
 import LinearIndeterminate from "./admin/Loading";
 import Main from "./components/Main";

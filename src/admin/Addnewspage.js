@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import ReactPlayer from "react-player";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -12,7 +14,6 @@ import { db, storage } from "../App";
 import { useHistory } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import ReactPlayer from "react-player";
 
 const useStyles = makeStyles((theme) => ({
   root: {
