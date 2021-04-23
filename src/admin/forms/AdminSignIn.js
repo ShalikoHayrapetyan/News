@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
     height: "38px",
     marginBottom: "8px",
   },
+  errors: {
+    textAlign: "center",
+    color: "red",
+    display: "block",
+  },
 }));
 
 export default function AdminSignIn() {
@@ -90,13 +95,7 @@ export default function AdminSignIn() {
           Welcome Admin
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSignInAdmin}>
-          <input
-            className={classes.inputs}
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            type="text"
-            placeholder="Email"
-          />
+          <input className={classes.inputs} value={login} onChange={(e) => setLogin(e.target.value)} type="text" placeholder="Email" />
           <input
             value={password}
             className={classes.inputs}
@@ -105,16 +104,10 @@ export default function AdminSignIn() {
             placeholder="Password"
           />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             Sign In
           </Button>
-          {error && <span>{error}</span>}
+          {error && <span className={classes.errors}>{error}</span>}
         </form>
       </div>
 

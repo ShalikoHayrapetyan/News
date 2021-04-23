@@ -152,11 +152,7 @@ const EditNews = () => {
   const imagesList = (imgs) => {
     return imgs.map((itemSrc, i) => (
       <span key={uuidv4()}>
-        <IconButton
-          onClick={() => removeImg(i)}
-          aria-label="delete"
-          className={classes.margin}
-        >
+        <IconButton onClick={() => removeImg(i)} aria-label="delete" className={classes.margin}>
           <DeleteIcon />
         </IconButton>
         <img width="200" src={itemSrc} alt="" />
@@ -168,11 +164,7 @@ const EditNews = () => {
     if (coverImage.length > 1) {
       return (
         <span>
-          <IconButton
-            onClick={() => setCoverImage("")}
-            aria-label="delete"
-            className={classes.margin}
-          >
+          <IconButton onClick={() => setCoverImage("")} aria-label="delete" className={classes.margin}>
             <DeleteIcon />
           </IconButton>
           <img width="300" src={coverImage} alt="" />
@@ -185,15 +177,8 @@ const EditNews = () => {
     <div className="add-news">
       <h2 className="h2">Edit post</h2>
 
-      <FormControl
-        variant="outlined"
-        className={classes.formControl}
-        fullWidth
-        style={{ margin: 15 }}
-      >
-        <InputLabel htmlFor="outlined-age-native-simple">
-          New categories
-        </InputLabel>
+      <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
+        <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
         <Select
           native
           value={category}
@@ -258,14 +243,7 @@ const EditNews = () => {
       />
 
       <div className={classes.root}>
-        <input
-          onChange={coverImgUpload}
-          accept="image/*"
-          name={coverImage}
-          className={classes.input}
-          id="coverImg"
-          type="file"
-        />
+        <input onChange={coverImgUpload} accept="image/*" name={coverImage} className={classes.input} id="coverImg" type="file" />
         <label htmlFor="coverImg">
           <Button variant="contained" color="primary" component="span">
             Upload
@@ -311,14 +289,7 @@ const EditNews = () => {
         {video && video.length > 0 && <ReactPlayer url={video} />}
       </div>
       <div className="save-btn">
-        <Button
-          onClick={updateNews}
-          variant="contained"
-          color="primary"
-          size="large"
-          className={classes.button}
-          startIcon={<SaveIcon />}
-        >
+        <Button onClick={updateNews} variant="contained" color="primary" size="large" className={classes.button} startIcon={<SaveIcon />}>
           Update News
         </Button>
       </div>

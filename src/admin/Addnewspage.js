@@ -174,11 +174,7 @@ const AddNewsPage = () => {
   const imagesList = (imgs) => {
     return imgs.map((itemSrc, i) => (
       <span key={uuidv4()}>
-        <IconButton
-          onClick={() => removeImg(i)}
-          aria-label="delete"
-          className={classes.margin}
-        >
+        <IconButton onClick={() => removeImg(i)} aria-label="delete" className={classes.margin}>
           <DeleteIcon />
         </IconButton>
         <img width="200" src={itemSrc} alt="" />
@@ -190,11 +186,7 @@ const AddNewsPage = () => {
     if (coverImage.length > 1) {
       return (
         <span>
-          <IconButton
-            onClick={() => setCoverImage("")}
-            aria-label="delete"
-            className={classes.margin}
-          >
+          <IconButton onClick={() => setCoverImage("")} aria-label="delete" className={classes.margin}>
             <DeleteIcon />
           </IconButton>
           <img width="300" src={coverImage} alt="" />
@@ -207,15 +199,8 @@ const AddNewsPage = () => {
     <div className="add-news">
       <h2 className="h2">Add new post</h2>
 
-      <FormControl
-        variant="outlined"
-        className={classes.formControl}
-        fullWidth
-        style={{ margin: 15 }}
-      >
-        <InputLabel htmlFor="outlined-age-native-simple">
-          New categories
-        </InputLabel>
+      <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ margin: 15 }}>
+        <InputLabel htmlFor="outlined-age-native-simple">New categories</InputLabel>
         <Select
           native
           value={category}
@@ -242,9 +227,7 @@ const AddNewsPage = () => {
         id="outlined-full-width"
         label="Title"
         error={errors?.titleError}
-        helperText={
-          errors?.titleError ? "Text must be more than 5 simbols" : null
-        }
+        helperText={errors?.titleError ? "Text must be more than 5 simbols" : null}
         style={{ margin: 15 }}
         placeholder="Type news title"
         fullWidth
@@ -261,9 +244,7 @@ const AddNewsPage = () => {
         id="outlined-multiline-static"
         label="Short description"
         error={errors?.shortDescError}
-        helperText={
-          errors?.shortDescError ? "Text must be more than 15 simbols" : null
-        }
+        helperText={errors?.shortDescError ? "Text must be more than 15 simbols" : null}
         fullWidth
         multiline
         style={{ margin: 15 }}
@@ -278,9 +259,7 @@ const AddNewsPage = () => {
         id="outlined-multiline-static"
         label="Description"
         error={errors?.descError}
-        helperText={
-          errors?.descError ? "Text must be more than 30 simbols" : null
-        }
+        helperText={errors?.descError ? "Text must be more than 30 simbols" : null}
         fullWidth
         multiline
         style={{ margin: 15 }}
@@ -290,14 +269,7 @@ const AddNewsPage = () => {
       />
 
       <div className={classes.root}>
-        <input
-          onChange={coverImgUpload}
-          accept="image/*"
-          name={coverImage}
-          className={classes.input}
-          id="coverImg"
-          type="file"
-        />
+        <input onChange={coverImgUpload} accept="image/*" name={coverImage} className={classes.input} id="coverImg" type="file" />
         <label htmlFor="coverImg">
           <Button variant="contained" color="primary" component="span">
             Upload
@@ -332,10 +304,6 @@ const AddNewsPage = () => {
           onChange={(e) => setVideo(e.target.value)}
           id="outlined-full-width-2"
           label="Video URL"
-          error={errors?.titleError}
-          helperText={
-            errors?.titleError ? "Text must be more than 5 simbols" : null
-          }
           style={{ margin: 15 }}
           placeholder="add video URL"
           fullWidth
@@ -349,14 +317,7 @@ const AddNewsPage = () => {
       </div>
 
       <div className="save-btn">
-        <Button
-          onClick={addNews}
-          variant="contained"
-          color="primary"
-          size="large"
-          className={classes.button}
-          startIcon={<SaveIcon />}
-        >
+        <Button onClick={addNews} variant="contained" color="primary" size="large" className={classes.button} startIcon={<SaveIcon />}>
           Save
         </Button>
       </div>
