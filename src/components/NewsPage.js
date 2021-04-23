@@ -52,13 +52,11 @@ const NewsPage = () => {
   let index = allNewsData.indexOf(selectedNews);
   let { like, id, comments } = selectedNews;
   const updateNews = () => {
-    let newData = [...allNewsData];
-    newData[index] = { ...selectedNews, like };
-
     dispatch({
       type: "likesData",
       payload: {
-        data: newData,
+        index,
+        like,
       },
     });
     updateNewsLikedStatus(id, like);
@@ -115,23 +113,22 @@ const NewsPage = () => {
               </div>
             ) : (
               selectedNews.images.map((img) => (
-                <img  key={uuidv4()} src={img} alt="" />
+                <img key={uuidv4()} src={img} alt="" />
               ))
             )}
-            {selectedNews.video && 
-          <iframe
-            width="560"
-            height="315"
-            src={selectedNews.video}
-            title="YouTube video player"
-            frameBorder="0"
-           allow="accelerometer;
+            {selectedNews.video && (
+              <iframe
+                width="560"
+                height="315"
+                src={selectedNews.video}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer;
               autoplay; clipboard-write;
               encrypted-media; 
               gyroscope; picture-in-picture"
-                >
-                </iframe>}
-
+              ></iframe>
+            )}
 
             <CommentsBox id={id} comments={comments} index={index} />
           </div>
