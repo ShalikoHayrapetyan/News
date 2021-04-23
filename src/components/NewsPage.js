@@ -52,13 +52,11 @@ const NewsPage = () => {
   let index = allNewsData.indexOf(selectedNews);
   let { like, id, comments } = selectedNews;
   const updateNews = () => {
-    let newData = [...allNewsData];
-    newData[index] = { ...selectedNews, like };
-
     dispatch({
       type: "likesData",
       payload: {
-        data: newData,
+        index,
+        like,
       },
     });
     updateNewsLikedStatus(id, like);
@@ -105,33 +103,26 @@ const NewsPage = () => {
             {selectedNews.images.length > 2 ? (
               <div className={classes.wrap_imgs}>
                 {selectedNews.images.map((img, index, arr) => (
-                  <img
-                    key={uuidv4()}
-                    className={classes.imgs}
-                    src={img}
-                    alt={selectedNews.title}
-                  />
+                  <img key={uuidv4()} className={classes.imgs} src={img} alt={selectedNews.title} width="48%" />
                 ))}
               </div>
             ) : (
-              selectedNews.images.map((img) => (
-                <img  key={uuidv4()} src={img} alt="" />
-              ))
+              selectedNews.images.map((img) => <img key={uuidv4()} src={img} alt="" width="48%" />)
             )}
-            {selectedNews.video && 
-          <iframe
-            width="560"
-            height="315"
-            src={selectedNews.video}
-            title="YouTube video player"
-            frameBorder="0"
-           allow="accelerometer;
+            {selectedNews.video && (
+              <iframe
+                className="video"
+                width="560"
+                height="315"
+                src={selectedNews.video}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer;
               autoplay; clipboard-write;
               encrypted-media; 
               gyroscope; picture-in-picture"
-                >
-                </iframe>}
-
+              ></iframe>
+            )}
 
             <CommentsBox id={id} comments={comments} index={index} />
           </div>

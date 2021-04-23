@@ -64,12 +64,11 @@ const PostItem = (props) => {
 
   const updateNews = () => {
     let index = allNewsData.indexOf(props.news);
-    let newData = [...allNewsData];
-    newData[index] = { ...props.news, like };
     dispatch({
       type: "likesData",
       payload: {
-        data: newData,
+        index,
+        like,
       },
     });
 
