@@ -103,21 +103,15 @@ const NewsPage = () => {
             {selectedNews.images.length > 2 ? (
               <div className={classes.wrap_imgs}>
                 {selectedNews.images.map((img, index, arr) => (
-                  <img
-                    key={uuidv4()}
-                    className={classes.imgs}
-                    src={img}
-                    alt={selectedNews.title}
-                  />
+                  <img key={uuidv4()} className={classes.imgs} src={img} alt={selectedNews.title} width="48%" />
                 ))}
               </div>
             ) : (
-              selectedNews.images.map((img) => (
-                <img key={uuidv4()} src={img} alt="" />
-              ))
+              selectedNews.images.map((img) => <img key={uuidv4()} src={img} alt="" width="48%" />)
             )}
             {selectedNews.video && (
               <iframe
+                className="video"
                 width="560"
                 height="315"
                 src={selectedNews.video}

@@ -10,7 +10,7 @@ const Main = () => {
   return (
     <>
       <Header />
-      <div className="clock">
+      <div className="container justify-right">
         <Clock />
       </div>
       <Switch>

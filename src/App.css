@@ -49,9 +49,8 @@ body {
   margin: 0;
   width: 170px;
 }
-.clock {
+.justify-right {
   text-align: right;
-  margin-right: 55px;
 }
 
 .header__botom {
@@ -221,6 +220,8 @@ body {
 .article-body img {
   max-width: 100%;
   margin-right: 10px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .article-body img + img {
@@ -236,6 +237,11 @@ body {
 @media (max-width: 991px) {
   .article {
     width: 45%;
+  }
+
+  .video {
+    width: 100%;
+    height: 30vh;
   }
 }
 
@@ -292,8 +298,11 @@ body {
     margin-bottom: 12px;
   }
 
+  .article-body img {
+    margin-right: 5px;
+  }
   .article-body img + img {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 
   .logo {
@@ -311,6 +320,7 @@ body {
 
 .user-name {
   color: #3f51b5;
+  font-size: 18px;
 }
 .asideTexts {
   word-wrap: break-word;
